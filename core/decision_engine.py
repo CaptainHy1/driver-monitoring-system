@@ -103,7 +103,7 @@ class DecisionEngine:
             self.attention_score = max(0.0, self.attention_score - 1.0)
 
         # Ưu tiên cấp 3: Mất tập trung / Nhìn lệch hướng -> Level 1
-        elif self.distracted_frames >= CONSEC_DISTRACT_FRAMES or (tcn_id == 3 and tcn_conf > 0.65 and self.distracted_frames >= 15):
+        elif self.distracted_frames >= CONSEC_DISTRACT_FRAMES or (tcn_id == 3 and tcn_conf > 0.70 and self.distracted_frames >= 30):
             final_class_id = 3
             alert_level = 1
             alert_reason = "CHÚ Ý: Hướng nhìn bị lệch, hãy tập trung quan sát phía trước!"

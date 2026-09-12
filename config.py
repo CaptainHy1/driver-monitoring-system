@@ -66,14 +66,14 @@ SEQUENCE_LENGTH = 30  # Số frame trong cửa sổ trượt (30 frames ~ 1.0 gi
 # Ngưỡng sinh lý & heuristic (Failsafe Thresholds)
 EAR_DROWSY_THRESH = 0.20        # Dưới ngưỡng này coi như mắt nhắm
 MAR_YAWN_THRESH = 0.52          # Trên ngưỡng này coi như miệng mở rộng (ngáp)
-HEAD_YAW_THRESH = 25.0          # Độ lệch góc quay ngang (trái/phải) vượt quá ngưỡng này là mất tập trung
-HEAD_PITCH_THRESH = 20.0        # Độ gật gù/ngửa đầu vượt quá ngưỡng này là mất tập trung
-HEAD_ROLL_THRESH = 20.0         # Độ nghiêng đầu sang vai
+HEAD_YAW_THRESH = 45.0          # Độ lệch góc quay ngang (trái/phải) vượt quá ngưỡng này là mất tập trung
+HEAD_PITCH_THRESH = 35.0        # Độ gật gù/ngửa đầu vượt quá ngưỡng này là mất tập trung (tăng từ 20 lên 35 để phù hợp góc webcam)
+HEAD_ROLL_THRESH = 25.0         # Độ nghiêng đầu sang vai
 
 # Số frame tích lũy để kích hoạt cảnh báo tức thời
 CONSEC_DROWSY_FRAMES = 35       # ~1.2 giây nhắm mắt liên tục -> Báo động Level 2
 CONSEC_YAWN_FRAMES = 25         # ~0.8 giây mở miệng -> Báo Level 1
-CONSEC_DISTRACT_FRAMES = 40     # ~1.3 giây quay mặt hướng khác -> Báo Level 1
+CONSEC_DISTRACT_FRAMES = 65     # ~2.2 giây quay mặt hướng khác -> Báo Level 1 (tăng từ 40 lên 65 để tránh báo liên tục)
 CONSEC_PHONE_FRAMES = 15        # ~0.5 giây phát hiện điện thoại gần mặt -> Báo Level 2
 
 # Ngưỡng tin cậy của Object Detector (YOLO)

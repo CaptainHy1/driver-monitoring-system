@@ -37,9 +37,9 @@ from ui.hud_overlay import HUDOverlay
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Chạy GuardCabin DMS trên file video")
-    parser.add_argument("--input", type=str, required=True, help="Đường dẫn file video đầu vào")
+    parser.add_argument("-i", "--input", "--video", dest="input", type=str, required=True, help="Đường dẫn file video đầu vào")
     parser.add_argument("--yolo", type=str, default=YOLO_MODEL_PATH, help="Đường dẫn file trọng số YOLO (e.g. weights/best.pt)")
-    parser.add_argument("--output", type=str, default=None, help="Đường dẫn file video đầu ra (tùy chọn)")
+    parser.add_argument("-o", "--output", dest="output", type=str, default=None, help="Đường dẫn file video đầu ra (tùy chọn)")
     parser.add_argument("--no-display", action="store_true", help="Không mở cửa sổ GUI hiển thị (chạy ngầm)")
     return parser.parse_args()
 
