@@ -13,10 +13,14 @@ import numpy as np
 import mediapipe as mp
 import math
 
+try:
+    mp_face_mesh = mp.solutions.face_mesh
+except Exception:
+    import mediapipe.python.solutions.face_mesh as mp_face_mesh
+
 class FaceMeshDetector:
     def __init__(self, static_image_mode=False, max_num_faces=1, min_detection_confidence=0.5, min_tracking_confidence=0.5):
-        self.mp_face_mesh = mp.solutions.face_mesh
-        self.face_mesh = self.mp_face_mesh.FaceMesh(
+        self.face_mesh = mp_face_mesh.FaceMesh(
             static_image_mode=static_image_mode,
             max_num_faces=max_num_faces,
             refine_landmarks=True,  # Bật iris landmarks (468-477)
