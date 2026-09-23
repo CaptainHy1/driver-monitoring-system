@@ -3,6 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Logs and telemetry
+*.log
+dms_event_log.jsonl
+
+# Redundant model weights in root (weights belong in weights/)
+/yolov8n.pt
+/yolov8n-pose.pt
+
 # Virtual environments
 venv/
 .venv/
@@ -19,8 +27,3 @@ ENV/
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Temporary files
-*.tmp
-*.log
-yolo11n.pt

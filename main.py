@@ -1,186 +1,169 @@
 """
-Chương trình chính: Hệ Thống Giám Sát Và Cảnh Báo Trạng Thái Tài Xế (GuardCabin DMS)
-Chạy thời gian thực từ Webcam hoặc luồng Video.
-Hotkeys:
-  'q' - Thoát chương trình
-  'm' - Bật / Tắt âm thanh cảnh báo (Mute)
-  'r' - Đặt lại số liệu thống kê phiên lái xe
-  's' - Lưu ảnh chụp màn hình HUD
+Main Entry Point for Multimodal Driver Monitoring System (DMS)
+Supports Live Webcam, Video File, or Synthetic Demo Mode with full UTF-8 Vietnamese HUD.
 """
 
-import sys
 import os
-import time
+import sys
+
+# Suppress verbose TensorFlow / Keras warnings
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
+import warnings
+warnings.filterwarnings("ignore")
+
 import argparse
+import json
+import time
 import cv2
 import numpy as np
 
-# Đảm bảo mã hóa UTF-8 an toàn trên mọi terminal Windows
-if sys.platform == "win32":
-    try:
-        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
-    except Exception:
-        pass
+from pipeline import DMSPipeline
+from config import AlertLevel
 
-from config import (
-    CAMERA_ID, FRAME_WIDTH, FRAME_HEIGHT,
-    SEQUENCE_LENGTH, FEATURE_DIM,
-    TCN_ONNX_PATH, TCN_WEIGHTS_PATH, YOLO_MODEL_PATH
-)
-from features.face_mesh import FaceMeshDetector
-from features.feature_extractor import FeatureExtractor
-from models.yolo_detector import YOLODetector
-from models.tcn_classifier import TCNClassifier
-from core.sliding_window import SlidingWindowBuffer
-from core.decision_engine import DecisionEngine
-from core.alert_manager import AlertManager
-from core.session_tracker import SessionTracker
-from ui.hud_overlay import HUDOverlay
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="GuardCabin DMS - Real-time Driver Monitoring System")
-    parser.add_argument("--source", type=str, default=str(CAMERA_ID), help="Chỉ số Camera (e.g. 0) hoặc đường dẫn file video")
-    parser.add_argument("--yolo", type=str, default=YOLO_MODEL_PATH, help="Đường dẫn file trọng số YOLO (e.g. weights/best.pt)")
-    parser.add_argument("--onnx", action="store_true", help="Ưu tiên suy luận bằng ONNX Runtime")
-    parser.add_argument("--yolo-interval", type=int, default=3, help="Chu kỳ chạy YOLO (chạy mỗi N frame để tối ưu FPS cao nhất)")
-    parser.add_argument("--no-sound", action="store_true", help="Tắt âm thanh cảnh báo")
-    return parser.parse_args()
+def generate_mock_driver_frame(step: int) -> np.ndarray:
+    """Generates a synthetic cabin frame for testing and demonstration."""
+    frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+    # Background cabin gradient
+    frame[:] = (40, 42, 45)
+
+    # Windshield zone
+    cv2.rectangle(frame, (200, 50), (1080, 400), (90, 85, 75), -1)
+
+    # Steering wheel
+    cv2.circle(frame, (640, 600), 160, (20, 20, 20), 28)
+    cv2.circle(frame, (640, 600), 160, (60, 60, 60), 4)
+
+    # Driver head representation
+    head_y = 280
+    cv2.circle(frame, (640, head_y), 70, (180, 190, 210), -1)
+
+    # Driver eyes
+    eye_offset = 25
+    cv2.circle(frame, (640 - eye_offset, head_y - 10), 10, (20, 20, 20), -1)
+    cv2.circle(frame, (640 + eye_offset, head_y - 10), 10, (20, 20, 20), -1)
+
+    # Driver body shoulders
+    cv2.ellipse(frame, (640, 480), (160, 110), 0, 0, 180, (70, 60, 140), -1)
+
+    # Dynamic scenario simulation based on step
+    phase = (step // 60) % 4
+    if phase == 1:
+        # Simulate Phone near ear
+        cv2.rectangle(frame, (700, head_y - 20), (745, head_y + 60), (30, 30, 30), -1)
+        cv2.putText(frame, "MOPHONG: DUNG DIEN THOAI", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 165, 255), 2)
+    elif phase == 2:
+        # Simulate Closed Eyes (Drowsiness)
+        cv2.line(frame, (640 - eye_offset - 10, head_y - 10), (640 - eye_offset + 10, head_y - 10), (240, 240, 240), 3)
+        cv2.line(frame, (640 + eye_offset - 10, head_y - 10), (640 + eye_offset + 10, head_y - 10), (240, 240, 240), 3)
+        cv2.putText(frame, "MOPHONG: NGU GAT (NHAM MAT)", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+    elif phase == 3:
+        cv2.putText(frame, "MOPHONG: BUONG 2 TAY KHOI VO-LANG", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 200, 255), 2)
+
+    return frame
+
+
+def open_camera_stream(source_str: str):
+    """Safely opens camera or video stream with DirectShow fallback on Windows."""
+    if source_str.isdigit():
+        source_idx = int(source_str)
+        # Try DirectShow on Windows for fastest and most reliable webcam initialization
+        if sys.platform.startswith("win"):
+            cap = cv2.VideoCapture(source_idx, cv2.CAP_DSHOW)
+            if cap.isOpened():
+                return cap
+        # Default backend fallback
+        cap = cv2.VideoCapture(source_idx)
+        return cap
+    else:
+        # Video file path
+        return cv2.VideoCapture(source_str)
+
 
 def main():
-    args = parse_args()
-    print("=" * 65)
-    print("🚗 GUARDCABIN DMS - HỆ THỐNG GIÁM SÁT TÀI XẾ THỜI GIAN THỰC")
-    print("=" * 65)
+    parser = argparse.ArgumentParser(description="Multimodal Driver Monitoring System (DMS)")
+    parser.add_argument("--source", type=str, default="0", help="Camera index (0) or path to video file")
+    parser.add_argument("--demo", action="store_true", help="Run in synthetic demonstration mode")
+    parser.add_argument("--save-log", type=str, default="dms_event_log.jsonl", help="Path to write JSONL events")
+    parser.add_argument("--headless", action="store_true", help="Run without cv2.imshow window (for server/CI)")
+    parser.add_argument("--max-frames", type=int, default=0, help="Stop after N frames (0 for infinite)")
+    args = parser.parse_args()
 
-    # 1. Khởi tạo thiết bị đầu vào (Camera / Video File)
-    source = int(args.source) if args.source.isdigit() else args.source
-    cap = cv2.VideoCapture(source)
-    if not cap.isOpened():
-        print(f"❌ LỖI: Không thể mở luồng video từ nguồn: {source}")
-        return
+    pipeline = DMSPipeline()
+    print("=" * 60)
+    print("HỆ THỐNG GIÁM SÁT TÀI XẾ ĐA MÔ THỨC (MULTIMODAL DMS) ĐÃ KHỞI ĐỘNG")
+    print(f"Chế độ: {'MÔ PHỎNG DEMO' if args.demo else f'NGUỒN VIDEO: {args.source}'}")
+    print("Bấm phím 'q' trên cửa sổ video để dừng.")
+    print("=" * 60)
 
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
+    cap = None
+    if not args.demo:
+        cap = open_camera_stream(args.source)
+        if not cap.isOpened():
+            print(f"[Main] Cảnh báo: Không thể mở camera '{args.source}'. Tự động chuyển sang chế độ --demo.")
+            args.demo = True
+            cap = None
+        else:
+            # Camera warmup: try reading a frame with retries
+            warmup_ok = False
+            for _ in range(10):
+                ret, test_frame = cap.read()
+                if ret and test_frame is not None and test_frame.size > 0:
+                    warmup_ok = True
+                    break
+                time.sleep(0.1)
 
-    # 2. Khởi tạo các Module hệ thống
-    print("\n[Hệ Thống] Đang khởi tạo các mô hình và module xử lý...")
-    print(f"[Hệ Thống] Sử dụng mô hình YOLO: {args.yolo}")
-    face_detector = FaceMeshDetector()
-    yolo_detector = YOLODetector(model_path=args.yolo)
-    feature_extractor = FeatureExtractor(feature_dim=FEATURE_DIM)
-    window_buffer = SlidingWindowBuffer(window_size=SEQUENCE_LENGTH, feature_dim=FEATURE_DIM)
+            if not warmup_ok:
+                print(f"[Main] Cảnh báo: Camera '{args.source}' không trả về khung hình (có thể đang bận). Chuyển sang --demo.")
+                cap.release()
+                cap = None
+                args.demo = True
 
-    # Khởi tạo mô hình TCN
-    tcn_classifier = TCNClassifier(
-        onnx_path=TCN_ONNX_PATH,
-        pth_path=TCN_WEIGHTS_PATH
-    )
-
-    decision_engine = DecisionEngine()
-    alert_manager = AlertManager(enabled=not args.no_sound)
-    session_tracker = SessionTracker()
-    hud = HUDOverlay()
-
-    print("[Hệ Thống] Khởi tạo hoàn tất! Bắt đầu giám sát...")
-    print("👉 Phím tắt: [Q] Thoát | [M] Bật/Tắt Còi | [R] Reset Thống Kê | [S] Chụp ảnh")
-
-    frame_count = 0
-    cached_yolo_info = None
-    fps = 30.0
-    prev_time = time.time()
-
-    window_name = "GuardCabin DMS - Driver Monitoring System"
-    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
-    cv2.resizeWindow(window_name, 960, 720)
+    frame_idx = 0
+    log_file = open(args.save_log, "a", encoding="utf-8") if args.save_log else None
 
     try:
         while True:
-            loop_start = time.perf_counter()
-            ret, frame = cap.read()
-            if not ret:
-                print("[Video] Kết thúc luồng video hoặc mất tín hiệu camera.")
+            frame_idx += 1
+            if args.max_frames > 0 and frame_idx > args.max_frames:
                 break
 
-            frame_count += 1
+            if args.demo:
+                frame = generate_mock_driver_frame(frame_idx)
+                time.sleep(0.03)  # simulate ~30 FPS
+            else:
+                ret, frame = cap.read()
+                if not ret or frame is None:
+                    print("[Main] Kết thúc luồng video hoặc mất tín hiệu camera.")
+                    break
 
-            # 3. Giai đoạn 1: Trích xuất đặc trưng không gian (Spatial Features)
-            # A. MediaPipe Face Mesh (Chạy mỗi frame)
-            face_info = face_detector.process_frame(frame)
+            # Process frame through full M1-M9 pipeline
+            vis_frame, decision, json_event = pipeline.process_frame(frame)
 
-            # B. YOLOv11 Object Detection (Chạy cách quãng để đạt FPS > 30)
-            face_bbox = face_info.get("face_bbox") if face_info else None
-            if frame_count % args.yolo_interval == 0 or cached_yolo_info is None:
-                cached_yolo_info = yolo_detector.detect(frame, face_bbox=face_bbox)
-            yolo_info = cached_yolo_info
+            # Log events with warning levels
+            if log_file and decision.level > AlertLevel.LEVEL_0:
+                log_file.write(json.dumps(json_event, ensure_ascii=False) + "\n")
+                log_file.flush()
 
-            # C. Đóng gói Vector 1D (V_t)
-            v_t = feature_extractor.extract_vector(face_info, yolo_info)
+            # Console output on alert status changes
+            if decision.level >= AlertLevel.LEVEL_2:
+                print(f"[CẢNH BÁO MỨC {decision.level}] Frame {frame_idx}: {decision.message} (Thời gian vi phạm: {decision.violation_duration}s)")
 
-            # 4. Giai đoạn 2: Cửa sổ trượt & Mô hình TCN (Temporal Features)
-            window_buffer.append(v_t)
-            current_window = window_buffer.get_window()
-
-            # Phân tích chuỗi qua TCN
-            tcn_result = tcn_classifier.predict(current_window)
-
-            # 5. Bộ suy luận lai (Hybrid Decision Engine)
-            evaluation = decision_engine.evaluate(face_info, yolo_info, tcn_result)
-
-            # 6. Kích hoạt cảnh báo âm thanh
-            alert_lvl = evaluation.get("alert_level", 0)
-            alert_msg = evaluation.get("alert_reason", "")
-            if alert_lvl > 0:
-                alert_manager.trigger(alert_lvl, alert_msg)
-
-            # 7. Cập nhật thống kê phiên lái xe
-            session_tracker.update(face_info, evaluation)
-            stats = session_tracker.get_stats()
-
-            # 8. Tính toán FPS & Độ trễ
-            loop_time = time.perf_counter() - loop_start
-            latency_ms = loop_time * 1000.0
-
-            curr_time = time.time()
-            fps = 0.9 * fps + 0.1 * (1.0 / max(1e-5, (curr_time - prev_time)))
-            prev_time = curr_time
-
-            # 9. Vẽ giao diện Cyber HUD Overlay
-            hud_frame = hud.draw_hud(
-                frame.copy(),
-                face_info=face_info,
-                yolo_info=yolo_info,
-                evaluation_result=evaluation,
-                session_stats=stats,
-                fps=fps,
-                latency_ms=latency_ms
-            )
-
-            # 10. Hiển thị khung hình
-            cv2.imshow(window_name, hud_frame)
-
-            # Xử lý phím tương tác
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord('q') or key == 27:  # 'q' hoặc ESC
-                break
-            elif key == ord('m'):  # Toggle mute
-                alert_manager.toggle_mute()
-            elif key == ord('r'):  # Reset thống kê
-                session_tracker = SessionTracker()
-                window_buffer.reset()
-                print("[Hệ Thống] Đã đặt lại dữ liệu phiên giám sát!")
-            elif key == ord('s'):  # Chụp ảnh màn hình
-                shot_name = f"dms_screenshot_{int(time.time())}.jpg"
-                cv2.imwrite(shot_name, hud_frame)
-                print(f"[HUD] Đã lưu ảnh chụp màn hình: {shot_name}")
-
-    except KeyboardInterrupt:
-        print("\n[Hệ Thống] Nhận lệnh dừng từ người dùng.")
+            if not args.headless:
+                cv2.imshow("Multimodal DMS - Live Cabin HUD", vis_frame)
+                key = cv2.waitKey(1) & 0xFF
+                if key == ord('q'):
+                    break
     finally:
-        cap.release()
+        if cap:
+            cap.release()
+        if log_file:
+            log_file.close()
         cv2.destroyAllWindows()
-        alert_manager.stop()
-        print("[Hệ Thống] Đã giải phóng tài nguyên. Tạm biệt!")
+        print("[Main] Hệ thống DMS đã dừng an toàn.")
+
 
 if __name__ == "__main__":
     main()
