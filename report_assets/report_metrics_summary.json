@@ -1,0 +1,53 @@
+{
+    "best_epoch": 17,
+    "val_accuracy": 97.70833333333333,
+    "val_loss": 0.09430331081772844,
+    "macro_avg_f1": 97.57614210857463,
+    "per_class": {
+        "Normal": {
+            "precision": 98.36065573770492,
+            "recall": 92.3076923076923,
+            "f1_score": 95.23809523809523,
+            "support": 65
+        },
+        "Drowsy": {
+            "precision": 97.40259740259741,
+            "recall": 100.0,
+            "f1_score": 98.68421052631578,
+            "support": 75
+        },
+        "Yawn": {
+            "precision": 98.85057471264368,
+            "recall": 98.85057471264368,
+            "f1_score": 98.85057471264368,
+            "support": 87
+        },
+        "Distracted": {
+            "precision": 97.89473684210527,
+            "recall": 100.0,
+            "f1_score": 98.93617021276596,
+            "support": 93
+        },
+        "Phone": {
+            "precision": 95.0,
+            "recall": 98.7012987012987,
+            "f1_score": 96.81528662420382,
+            "support": 77
+        },
+        "Smoking": {
+            "precision": 98.75,
+            "recall": 95.18072289156626,
+            "f1_score": 96.93251533742331,
+            "support": 83
+        }
+    },
+    "benchmark": {
+        "facemesh_ms": 3.8286228750017415,
+        "yolo_ms": 44.9928928571483,
+        "feature_extract_ms": 0.03547817500120232,
+        "tcn_inference_ms": 1.7703958749990534,
+        "full_loop_interval3_ms": 21.383458400001842,
+        "fps_actual": 46.76512008927021,
+        "device": "Apple M1 (CPU)"
+    }
+}
