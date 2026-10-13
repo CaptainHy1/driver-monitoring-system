@@ -34,7 +34,7 @@ class DMSPipeline:
 
     def __init__(self, device: torch.device = DEVICE):
         self.device = device
-        print(f"[DMSPipeline] Đang khởi tạo hệ thống trên thiết bị: {self.device}")
+        print(f"[DMSPipeline] Initializing DMS Pipeline on device: {self.device}")
 
         # [M1] Preprocessor
         self.cropper = MultiROICropper()
@@ -44,42 +44,42 @@ class DMSPipeline:
         if os.path.exists(FACE_VIT_WEIGHTS_PATH):
             try:
                 self.face_analyzer.model.load_state_dict(torch.load(FACE_VIT_WEIGHTS_PATH, map_location=self.device, weights_only=True))
-                print(f"[DMSPipeline] ✓ Đã nạp checkpoint FaceViT: {FACE_VIT_WEIGHTS_PATH}")
+                print(f"[DMSPipeline] ✓ Loaded FaceViT checkpoint: {FACE_VIT_WEIGHTS_PATH}")
             except Exception as e:
-                print(f"[DMSPipeline] ⚠ Cảnh báo nạp FaceViT: {e}")
+                print(f"[DMSPipeline] ⚠ Warning loading FaceViT: {e}")
         else:
-            print(f"[DMSPipeline] ℹ FaceViT: Chưa có checkpoint tại {FACE_VIT_WEIGHTS_PATH}, chạy chế độ zero-shot fallback.")
+            print(f"[DMSPipeline] ℹ FaceViT: No checkpoint at {FACE_VIT_WEIGHTS_PATH}, running zero-shot fallback mode.")
 
         # [M3] Pose Keypoints Stream
         pose_weights = YOLO_POSE_WEIGHTS_PATH if os.path.exists(YOLO_POSE_WEIGHTS_PATH) else "yolov8n-pose.pt"
         self.pose_detector = PoseDetector(model_name=pose_weights, device=self.device)
-        print(f"[DMSPipeline] ✓ Đã nạp mô hình YOLO-Pose: {pose_weights}")
+        print(f"[DMSPipeline] ✓ Loaded YOLO-Pose model: {pose_weights}")
 
         # [M4] Skeletal Dynamics Stream (ST-GCN)
         self.st_gcn = STGCN(device=self.device).to(self.device)
         if os.path.exists(ST_GCN_WEIGHTS_PATH):
             try:
                 self.st_gcn.load_state_dict(torch.load(ST_GCN_WEIGHTS_PATH, map_location=self.device, weights_only=True))
-                print(f"[DMSPipeline] ✓ Đã nạp checkpoint ST-GCN: {ST_GCN_WEIGHTS_PATH}")
+                print(f"[DMSPipeline] ✓ Loaded ST-GCN checkpoint: {ST_GCN_WEIGHTS_PATH}")
             except Exception as e:
-                print(f"[DMSPipeline] ⚠ Cảnh báo nạp ST-GCN: {e}")
+                print(f"[DMSPipeline] ⚠ Warning loading ST-GCN: {e}")
         else:
-            print(f"[DMSPipeline] ℹ ST-GCN: Chưa có checkpoint tại {ST_GCN_WEIGHTS_PATH}, dùng cấu trúc đồ thị chuẩn.")
+            print(f"[DMSPipeline] ℹ ST-GCN: No checkpoint at {ST_GCN_WEIGHTS_PATH}, using default graph structure.")
         self.st_gcn.eval()
 
         # [M5] Object & Hand Interaction Stream (YOLO)
         obj_weights = YOLO_OBJECT_WEIGHTS_PATH if os.path.exists(YOLO_OBJECT_WEIGHTS_PATH) else "yolov8n.pt"
         self.object_detector = CockpitObjectDetector(model_name=obj_weights, device=self.device)
-        print(f"[DMSPipeline] ✓ Đã nạp mô hình YOLO-Object: {obj_weights}")
+        print(f"[DMSPipeline] ✓ Loaded YOLO-Object model: {obj_weights}")
 
         # [M6] Multimodal Fusion Layer
         self.fusion_layer = MultimodalFusionLayer().to(self.device)
         if os.path.exists(FUSION_WEIGHTS_PATH):
             try:
                 self.fusion_layer.load_state_dict(torch.load(FUSION_WEIGHTS_PATH, map_location=self.device, weights_only=True))
-                print(f"[DMSPipeline] ✓ Đã nạp checkpoint Fusion Layer: {FUSION_WEIGHTS_PATH}")
+                print(f"[DMSPipeline] ✓ Loaded Fusion Layer checkpoint: {FUSION_WEIGHTS_PATH}")
             except Exception as e:
-                print(f"[DMSPipeline] ⚠ Cảnh báo nạp Fusion Layer: {e}")
+                print(f"[DMSPipeline] ⚠ Warning loading Fusion Layer: {e}")
         self.fusion_layer.eval()
 
         # [M7] Temporal Transformer
@@ -87,9 +87,9 @@ class DMSPipeline:
         if os.path.exists(TEMPORAL_TRANSFORMER_WEIGHTS_PATH):
             try:
                 self.temporal_transformer.load_state_dict(torch.load(TEMPORAL_TRANSFORMER_WEIGHTS_PATH, map_location=self.device, weights_only=True))
-                print(f"[DMSPipeline] ✓ Đã nạp checkpoint Temporal Transformer: {TEMPORAL_TRANSFORMER_WEIGHTS_PATH}")
+                print(f"[DMSPipeline] ✓ Loaded Temporal Transformer checkpoint: {TEMPORAL_TRANSFORMER_WEIGHTS_PATH}")
             except Exception as e:
-                print(f"[DMSPipeline] ⚠ Cảnh báo nạp Temporal Transformer: {e}")
+                print(f"[DMSPipeline] ⚠ Warning loading Temporal Transformer: {e}")
         self.temporal_transformer.eval()
 
         # [M8] Alert Engine
@@ -140,7 +140,7 @@ class DMSPipeline:
         # -------------------------------------------------------------
         # Step 3 [M3 & M4]: Body/Pose Stream (YOLO-Pose & ST-GCN)
         # -------------------------------------------------------------
-        pose_info = self.pose_detector.detect(body_roi)
+        pose_info = self.pose_detector.detect(frame)
         kps = pose_info["keypoints"]  # (17, 3)
         self.pose_buffer.append(kps)
 
@@ -158,7 +158,7 @@ class DMSPipeline:
         # Step 4 [M5]: Hands & Object Stream (Fine-tuned YOLO)
         # -------------------------------------------------------------
         # Pass full frame so objects (phone, bottle) anywhere in cabin/hand are detected
-        object_info = self.object_detector.detect(cockpit_bgr=frame, driver_keypoints=kps)
+        object_info = self.object_detector.detect(cockpit_bgr=frame, driver_keypoints=kps, hand_to_ear=pose_info.get("hand_to_ear", False))
         f_hand = object_info["f_hand"]  # (1, 256)
 
         # -------------------------------------------------------------

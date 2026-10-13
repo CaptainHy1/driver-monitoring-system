@@ -33,42 +33,45 @@ class DMSVisualizer:
     }
 
     # Vietnamese translation map for status fields
-    GAZE_VN_MAP = {
-        "forward": "Nhìn thẳng phía trước",
-        "looking_down": "Cúi nhìn xuống (Điện thoại/Taplo)",
-        "looking_left": "Nhìn gương trái",
-        "looking_right": "Nhìn gương phải",
-        "eyes_closed": "Đang nhắm mắt",
+    GAZE_MAP = {
+        "forward": "Looking Forward",
+        "looking_down": "Looking Down (Phone/Lap)",
+        "looking_left": "Looking Left Mirror",
+        "looking_right": "Looking Right Mirror",
+        "eyes_closed": "Eyes Closed",
     }
 
-    HAND_STATUS_VN_MAP = {
-        "normal": "Bình thường",
-        "hands_visible": "Quan sát thấy tay",
-        "hand_raised": "Tay giơ cao (gần mặt/tai)",
-        "holding_phone": "Cầm điện thoại",
-        "holding_drink": "Cầm chai / cốc nước",
+    HAND_STATUS_MAP = {
+        "normal": "Normal",
+        "hands_visible": "Hand Visible",
+        "hand_raised": "Hand Raised (Face/Ear)",
+        "holding_phone": "Holding Phone",
+        "holding_drink": "Holding Drink",
     }
 
-    POSTURE_VN_MAP = {
-        "normal": "Tư thế bình thường",
-        "right_arm_raised_to_head": "Tay phải đưa lên đầu/tai",
-        "left_arm_raised_to_head": "Tay trái đưa lên đầu/tai",
-        "reaching_sideways_or_behind": "Rướn người / Ngoái sau",
+    POSTURE_MAP = {
+        "normal": "Normal Posture",
+        "right_arm_raised_to_head": "Right Arm Raised",
+        "left_arm_raised_to_head": "Left Arm Raised",
+        "reaching_sideways_or_behind": "Reaching Behind/Side",
     }
 
-    OBJECT_VN_MAP = {
-        "cell phone": "Điện thoại",
-        "cellphone": "Điện thoại",
-        "bottle": "Chai nước",
-        "cup": "Cốc nước",
-        "sandwich": "Đồ ăn",
-        "food": "Đồ ăn",
-        "cigarette": "Thuốc lá",
+    OBJECT_MAP = {
+        "cell phone": "Cell Phone",
+        "cellphone": "Cell Phone",
+        "bottle": "Water Bottle",
+        "cup": "Cup",
+        "sandwich": "Food",
+        "food": "Food",
+        "cigarette": "Cigarette",
     }
 
     def __init__(self):
         # Locate system TTF font with Vietnamese support (Arial / Segoe UI on Windows)
         font_candidates = [
+            "/System/Library/Fonts/Supplemental/Arial.ttf",
+            "/Library/Fonts/Arial.ttf",
+            "/System/Library/Fonts/Helvetica.ttc",
             "C:/Windows/Fonts/arial.ttf",
             "C:/Windows/Fonts/segoeui.ttf",
             "C:/Windows/Fonts/tahoma.ttf",
@@ -116,8 +119,8 @@ class DMSVisualizer:
         text_queue = []  # List of tuples: (text, (x, y), font_size, rgb_color)
         for obj in object_info.get("detected_objects", []):
             x1, y1, x2, y2 = obj["bbox"]
-            vn_name = self.OBJECT_VN_MAP.get(obj["name"].lower(), obj["name"])
-            label = f"{vn_name} ({obj['confidence']:.2f})"
+            eng_name = self.OBJECT_MAP.get(obj["name"].lower(), obj["name"])
+            label = f"{eng_name} ({obj['confidence']:.2f})"
             box_color = (0, 0, 255) if "phone" in obj["name"] else (255, 200, 0)
             cv2.rectangle(vis, (x1, y1), (x2, y2), box_color, 2)
             # Queue label text
@@ -157,29 +160,29 @@ class DMSVisualizer:
 
         # Prepare panel Vietnamese info lines
         raw_gaze = face_info.get("gaze_direction", "forward")
-        vn_gaze = self.GAZE_VN_MAP.get(raw_gaze, raw_gaze)
+        eng_gaze = self.GAZE_MAP.get(raw_gaze, raw_gaze)
 
         raw_hand = object_info.get("hand_status", "normal")
-        vn_hand = self.HAND_STATUS_VN_MAP.get(raw_hand, "Bình thường")
+        eng_hand = self.HAND_STATUS_MAP.get(raw_hand, "Normal")
 
         raw_posture = pose_info.get("posture_state", "normal")
-        vn_posture = self.POSTURE_VN_MAP.get(raw_posture, raw_posture)
+        eng_posture = self.POSTURE_MAP.get(raw_posture, raw_posture)
 
-        eye_closed_str = "Đang nhắm" if face_info.get("eye_closed", False) else "Bình thường"
-        yawn_str = "Có ngáp" if face_info.get("yawning", False) else "Không"
+        eye_closed_str = "CLOSED" if face_info.get("eye_closed", False) else "Normal"
+        yawn_str = "YES" if face_info.get("yawning", False) else "NO"
 
         hp = face_info.get("head_pose", {})
         pitch_val = hp.get("pitch", 0.0)
-        gaze_display = f"{vn_gaze} (Pitch: {pitch_val:+.0f}°)" if raw_gaze == "looking_down" else f"{vn_gaze}"
+        gaze_display = f"{eng_gaze} (Pitch: {pitch_val:+.0f}°)" if raw_gaze == "looking_down" else f"{eng_gaze}"
 
         lines = [
-            f"Tốc độ khung hình (FPS): {fps:.1f}",
-            f"Hướng nhìn: {gaze_display}",
-            f"Trạng thái mắt: {eye_closed_str} (EAR: {face_info.get('ear', 0.0):.2f})",
-            f"Tỷ lệ nhắm mắt (PERCLOS): {face_info.get('perclos', 0.0)*100:.1f}%",
-            f"Dấu hiệu ngáp: {yawn_str} (MAR: {face_info.get('mar', 0.0):.2f})",
-            f"Bàn tay: {vn_hand}",
-            f"Tư thế: {vn_posture}",
+            f"Frame Rate (FPS): {fps:.1f}",
+            f"Gaze Direction: {gaze_display}",
+            f"Eye State: {eye_closed_str} (EAR: {face_info.get('ear', 0.0):.2f})",
+            f"Eye Closure (PERCLOS): {face_info.get('perclos', 0.0)*100:.1f}%",
+            f"Yawn Detected: {yawn_str} (MAR: {face_info.get('mar', 0.0):.2f})",
+            f"Hand Status: {eng_hand}",
+            f"Body Posture: {eng_posture}",
         ]
 
         for idx, line in enumerate(lines):
@@ -194,7 +197,7 @@ class DMSVisualizer:
         cv2.rectangle(vis, (20, meter_y), (20 + int(meter_w * pct), meter_y + meter_h), color, -1)
         cv2.rectangle(vis, (20, meter_y), (20 + meter_w, meter_y + meter_h), (220, 220, 220), 1)
 
-        gauge_text = f"Mức độ rủi ro phân tâm: {int(pct * 100)}%"
+        gauge_text = f"Distraction Risk: {int(pct * 100)}%"
         text_queue.append((gauge_text, (35 + meter_w, meter_y + 2), 16, (255, 255, 255)))
 
         # -------------------------------------------------------------

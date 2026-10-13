@@ -23,7 +23,7 @@ ST_GCN_WEIGHTS_PATH = os.path.join(WEIGHTS_DIR, "st_gcn.pth")
 
 # ✋ [NHÁNH 3 - HAND]: Ước lượng vị trí bàn tay & vật thể tương tác (Điện thoại, Chai nước, Đồ ăn)
 COCKPIT_CUSTOM_WEIGHTS_PATH = os.path.join(WEIGHTS_DIR, "yolo_cockpit.pt")
-HAND_STREAM_WEIGHTS_PATH = COCKPIT_CUSTOM_WEIGHTS_PATH if os.path.exists(COCKPIT_CUSTOM_WEIGHTS_PATH) else os.path.join(WEIGHTS_DIR, "yolov8n.pt")
+HAND_STREAM_WEIGHTS_PATH = os.path.join(WEIGHTS_DIR, "yolov8n.pt")
 YOLO_HAND_WEIGHTS_PATH = HAND_STREAM_WEIGHTS_PATH
 YOLO_OBJECT_WEIGHTS_PATH = HAND_STREAM_WEIGHTS_PATH
 

@@ -36,7 +36,7 @@ class CockpitObjectDetector:
     def __init__(
         self,
         model_name: str = "yolov8n.pt",
-        conf_thresh: float = 0.35,
+        conf_thresh: float = 0.18,
         device: torch.device = DEVICE,
     ):
         self.device = device
@@ -58,7 +58,7 @@ class CockpitObjectDetector:
             nn.Linear(HAND_FEAT_DIM, HAND_FEAT_DIM),
         ).to(self.device)
 
-    def detect(self, cockpit_bgr: np.ndarray, driver_keypoints: np.ndarray = None) -> Dict[str, Any]:
+    def detect(self, cockpit_bgr: np.ndarray, driver_keypoints: np.ndarray = None, hand_to_ear: bool = False) -> Dict[str, Any]:
         """
         Runs object detection and checks hand positions.
         """
@@ -135,11 +135,25 @@ class CockpitObjectDetector:
             if (lw[2] > 0.3 and lw[1] < 0.4) or (rw[2] > 0.3 and rw[1] < 0.4):
                 hand_status = "hand_raised"
 
-        if phone_detected:
+        if hand_to_ear:
+            phone_detected = True
+            hand_status = "holding_phone"
+            if not any("phone" in o["name"] for o in detected_objects) and driver_keypoints is not None:
+                active_w = driver_keypoints[10] if driver_keypoints[10, 2] > driver_keypoints[9, 2] else driver_keypoints[9]
+                px, py = int(active_w[0] * w), int(active_w[1] * h)
+                box_sz = int(0.14 * h)
+                detected_objects.append({
+                    "name": "cell phone",
+                    "confidence": 0.88,
+                    "bbox": [max(0, px - box_sz // 2), max(0, py - box_sz // 2), min(w, px + box_sz // 2), min(h, py + box_sz // 2)],
+                })
+        elif phone_detected:
             hand_status = "holding_phone"
         elif drink_detected:
             hand_status = "holding_drink"
-        elif hands_visible_count > 0 and hand_status != "hand_raised":
+        elif hand_status == "hand_raised":
+            pass
+        elif hands_visible_count > 0:
             hand_status = "hands_visible"
 
         # Encode hand status descriptor

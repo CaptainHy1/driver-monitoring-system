@@ -53,14 +53,14 @@ def generate_mock_driver_frame(step: int) -> np.ndarray:
     if phase == 1:
         # Simulate Phone near ear
         cv2.rectangle(frame, (700, head_y - 20), (745, head_y + 60), (30, 30, 30), -1)
-        cv2.putText(frame, "MOPHONG: DUNG DIEN THOAI", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 165, 255), 2)
+        cv2.putText(frame, "SIMULATION: PHONE USAGE", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 165, 255), 2)
     elif phase == 2:
         # Simulate Closed Eyes (Drowsiness)
         cv2.line(frame, (640 - eye_offset - 10, head_y - 10), (640 - eye_offset + 10, head_y - 10), (240, 240, 240), 3)
         cv2.line(frame, (640 + eye_offset - 10, head_y - 10), (640 + eye_offset + 10, head_y - 10), (240, 240, 240), 3)
-        cv2.putText(frame, "MOPHONG: NGU GAT (NHAM MAT)", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, "SIMULATION: DROWSINESS (EYES CLOSED)", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
     elif phase == 3:
-        cv2.putText(frame, "MOPHONG: BUONG 2 TAY KHOI VO-LANG", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 200, 255), 2)
+        cv2.putText(frame, "SIMULATION: HANDS OFF STEERING WHEEL", (50, 680), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 200, 255), 2)
 
     return frame
 
@@ -93,16 +93,16 @@ def main():
 
     pipeline = DMSPipeline()
     print("=" * 60)
-    print("HỆ THỐNG GIÁM SÁT TÀI XẾ ĐA MÔ THỨC (MULTIMODAL DMS) ĐÃ KHỞI ĐỘNG")
-    print(f"Chế độ: {'MÔ PHỎNG DEMO' if args.demo else f'NGUỒN VIDEO: {args.source}'}")
-    print("Bấm phím 'q' trên cửa sổ video để dừng.")
+    print("MULTIMODAL DRIVER MONITORING SYSTEM (DMS) INITIALIZED")
+    print(f"Mode: {'DEMO SIMULATION' if args.demo else f'VIDEO SOURCE: {args.source}'}")
+    print("Press 'q' in video window to exit.")
     print("=" * 60)
 
     cap = None
     if not args.demo:
         cap = open_camera_stream(args.source)
         if not cap.isOpened():
-            print(f"[Main] Cảnh báo: Không thể mở camera '{args.source}'. Tự động chuyển sang chế độ --demo.")
+            print(f"[Main] Warning: Unable to open camera '{args.source}'. Falling back to --demo mode.")
             args.demo = True
             cap = None
         else:
@@ -116,7 +116,7 @@ def main():
                 time.sleep(0.1)
 
             if not warmup_ok:
-                print(f"[Main] Cảnh báo: Camera '{args.source}' không trả về khung hình (có thể đang bận). Chuyển sang --demo.")
+                print(f"[Main] Warning: Camera '{args.source}' returned no frames. Falling back to --demo mode.")
                 cap.release()
                 cap = None
                 args.demo = True
@@ -136,7 +136,7 @@ def main():
             else:
                 ret, frame = cap.read()
                 if not ret or frame is None:
-                    print("[Main] Kết thúc luồng video hoặc mất tín hiệu camera.")
+                    print("[Main] Video stream ended or camera disconnected.")
                     break
 
             # Process frame through full M1-M9 pipeline
@@ -149,7 +149,7 @@ def main():
 
             # Console output on alert status changes
             if decision.level >= AlertLevel.LEVEL_2:
-                print(f"[CẢNH BÁO MỨC {decision.level}] Frame {frame_idx}: {decision.message} (Thời gian vi phạm: {decision.violation_duration}s)")
+                print(f"[ALERT LEVEL {decision.level}] Frame {frame_idx}: {decision.message} (Duration: {decision.violation_duration:.1f}s)")
 
             if not args.headless:
                 cv2.imshow("Multimodal DMS - Live Cabin HUD", vis_frame)
@@ -162,7 +162,7 @@ def main():
         if log_file:
             log_file.close()
         cv2.destroyAllWindows()
-        print("[Main] Hệ thống DMS đã dừng an toàn.")
+        print("[Main] DMS system stopped cleanly.")
 
 
 if __name__ == "__main__":
