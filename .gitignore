@@ -1,0 +1,15 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Reference / sample papers
+paper mẫu/
+"paper mẫu/"
+
+# Temporary and OS files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
