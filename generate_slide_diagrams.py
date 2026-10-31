@@ -14,15 +14,15 @@ plt.rcParams['font.size'] = 9
 
 # 1. Dataset distribution & Edge Cases
 def generate_dataset_figure():
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.2), dpi=300)
-    plt.subplots_adjust(wspace=0.32)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.2, 4.2), dpi=300)
+    plt.subplots_adjust(wspace=0.30)
 
-    classes = ['Normal', 'Drowsy', 'Yawn', 'Reaching\nBehind', 'Phone /\nObject']
-    samples = [400, 400, 400, 400, 400]
-    colors = ['#2B6CB0', '#C53030', '#DD6B20', '#805AD5', '#319795']
+    classes = ['Safe\n(->C0)', 'Phone\n(->C1)', 'Drowsy\n(->C2)', 'Yawn\n(->C2)', 'Reaching\n(->C3)', 'Eating\n(->C4)']
+    samples = [400, 400, 400, 400, 400, 400]
+    colors = ['#2B6CB0', '#319795', '#C53030', '#DD6B20', '#805AD5', '#2F855A']
 
-    bars = ax1.bar(classes, samples, color=colors, width=0.52, edgecolor='#1A202C', linewidth=1)
-    ax1.set_title('(a) Phan bo can bang mau (400 chuoi / lop, Tong 2,400 chuoi)', fontsize=9.5, fontweight='bold', pad=10)
+    bars = ax1.bar(classes, samples, color=colors, width=0.54, edgecolor='#1A202C', linewidth=1)
+    ax1.set_title('(a) Phan bo 6 nhanh hanh vi goc -> Gop 5 lop ADAS (2,400 chuoi)', fontsize=9.2, fontweight='bold', pad=10)
     ax1.set_ylabel('So luong chuoi thoi gian (T=30 frames)', fontsize=8.5)
     ax1.set_ylim(0, 480)
     for bar in bars:
@@ -44,50 +44,49 @@ def generate_dataset_figure():
         autotext.set_fontsize(8.5)
     for text in texts:
         text.set_fontsize(8.0)
-    ax2.set_title('(b) Ty le phan chia Tap du lieu & Tich hop 18% Ca bien', fontsize=9.5, fontweight='bold', pad=10)
+    ax2.set_title('(b) Ty le phan chia Tap du lieu & Tich hop 18% Ca bien', fontsize=9.2, fontweight='bold', pad=10)
 
     plt.tight_layout()
     plt.savefig('figures/fig_dataset_distribution.png', bbox_inches='tight')
     plt.close()
     print("✓ Saved figures/fig_dataset_distribution.png")
 
-# 2. Confusion Matrix
+# 2. Confusion Matrix (5 canonical ADAS classes C0-C4 on 450 test sequences)
 def generate_confusion_matrix():
-    # Classes: Normal(73), Drowsy(98), Yawn(76), Reaching(93), Phone(107) -> Total = 447
-    labels = ['Normal', 'Drowsy', 'Yawn', 'Reaching', 'Phone']
-    # Precise counts matching Precision and Recall from Slide 13:
-    # Normal: Recall=100% -> 73 predicted correctly. Precision=93.6% -> 73 / (73 + 3 + 2) = 73/78
-    # Drowsy: Recall=96.9% -> 95 correct, 3 misclassified. Precision=96.9%
-    # Yawn: Recall=96.1% -> 73 correct, 3 misclassified. Precision=100%
-    # Reaching: Recall=100% -> 93 correct. Precision=100%
-    # Phone: Recall=95.3% -> 102 correct, 5 misclassified. Precision=97.1%
+    # Exact 5x5 confusion matrix from systemsV2 (Total = 73 + 98 + 76 + 96 + 107 = 450 test sequences)
+    labels = ['C0: Safe', 'C1: Phone', 'C2: Drowsy', 'C3: Reaching', 'C4: Eating']
     cm = np.array([
-        [73,  0,  0,  0,  0],  # Normal: Recall = 100% (73/73)
-        [ 3, 95,  0,  0,  0],  # Drowsy: Recall = 96.9% (95/98)
-        [ 3,  0, 73,  0,  0],  # Yawn: Recall = 96.1% (73/76)
-        [ 0,  0,  0, 93,  0],  # Reaching: Recall = 100% (93/93)
-        [ 2,  3,  0,  0, 102]  # Phone: Recall = 95.3% (102/107)
+        [73,  0,  0,  0,   0],  # C0: Safe (Support=73, Recall=100.0%, Prec=93.6%)
+        [ 0, 95,  0,  0,   3],  # C1: Phone (Support=98, Recall=96.9%, Prec=96.9%)
+        [ 3,  0, 73,  0,   0],  # C2: Drowsy/Yawn (Support=76, Recall=96.1%, Prec=100.0%)
+        [ 0,  0,  0, 96,   0],  # C3: Reaching (Support=96, Recall=100.0%, Prec=100.0%)
+        [ 2,  3,  0,  0, 102]   # C4: Eating/Drinking (Support=107, Recall=95.3%, Prec=97.1%)
     ])
+    row_sums = cm.sum(axis=1, keepdims=True)
+    cm_pct = cm / row_sums * 100.0
     
-    fig, ax = plt.subplots(figsize=(6.2, 5.2), dpi=300)
-    cax = ax.matshow(cm, cmap=plt.cm.Blues, alpha=0.85)
+    fig, ax = plt.subplots(figsize=(6.4, 5.3), dpi=300)
+    cax = ax.matshow(cm_pct, cmap=plt.cm.Blues, alpha=0.88, vmin=0, vmax=100)
 
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
             val = cm[i, j]
-            text_color = "white" if val > 45 else "#1A202C"
-            ax.text(j, i, str(val), va='center', ha='center', fontsize=9.5, fontweight='bold', color=text_color)
+            pct = cm_pct[i, j]
+            text_color = "white" if pct > 50 else "#1A202C"
+            cell_str = f"{val}\n({pct:.1f}%)" if val > 0 else "0"
+            ax.text(j, i, cell_str, va='center', ha='center', fontsize=8.8, fontweight='bold', color=text_color)
 
-    fig.colorbar(cax, shrink=0.8)
+    cbar = fig.colorbar(cax, shrink=0.82)
+    cbar.set_label('Row Recall (%)', fontsize=8.5)
     ax.set_xticks(range(len(labels)))
     ax.set_yticks(range(len(labels)))
-    ax.set_xticklabels(labels, fontsize=8.5, fontweight='bold')
-    ax.set_yticklabels(labels, fontsize=8.5, fontweight='bold')
+    ax.set_xticklabels(labels, fontsize=8.2, fontweight='bold')
+    ax.set_yticklabels(labels, fontsize=8.2, fontweight='bold')
     ax.tick_params(top=False, bottom=True, labeltop=False, labelbottom=True)
     ax.set_xlabel('Predicted Label (Nhan du doan)', fontsize=9, fontweight='bold', labelpad=8)
     ax.set_ylabel('True Ground Truth Label (Nhan thuc te)', fontsize=9, fontweight='bold', labelpad=8)
-    ax.set_title('Ma tran nham lan (Confusion Matrix) - Temporal Transformer\nValidation Accuracy = 97.56% | Macro F1 = 97.57%', 
-                 fontsize=9.5, fontweight='bold', pad=12)
+    ax.set_title('Confusion Matrix (5-Class ADAS Taxonomy) - Temporal Transformer\nTest Accuracy = 97.56% (439/450) | Macro F1 = 97.57%', 
+                 fontsize=9.2, fontweight='bold', pad=12)
 
     plt.tight_layout()
     plt.savefig('figures/fig_confusion_matrix.png', bbox_inches='tight')

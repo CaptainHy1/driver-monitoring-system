@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang='vi'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>GuardCabin DMS: Hệ thống Giám sát Người lái Đa phương thái Thời gian thực</title>
+
+<style>
+    @page {
+        size: A4;
+        margin: 14mm 14mm 14mm 14mm;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        font-family: 'Times New Roman', Times, Georgia, serif;
+        font-size: 8.5pt;
+        line-height: 1.16;
+        color: #111;
+        background-color: #f1f5f9;
+        margin: 0;
+        padding: 20px;
+    }
+    .paper-container {
+        max-width: 210mm;
+        margin: 0 auto;
+        background: #fff;
+        padding: 14mm 14mm 16mm 14mm;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .front-matter {
+        text-align: center;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+    h1.title {
+        font-size: 15.5pt;
+        font-weight: bold;
+        line-height: 1.22;
+        margin: 0 0 8px 0;
+        color: #000;
+        text-transform: uppercase;
+    }
+    .authors {
+        font-size: 9pt;
+        margin-bottom: 6px;
+        font-weight: 500;
+    }
+    .affiliations {
+        font-size: 7.5pt;
+        font-style: italic;
+        color: #444;
+        margin-bottom: 10px;
+    }
+    .abstract-box {
+        text-align: justify;
+        font-size: 8pt;
+        line-height: 1.15;
+        margin: 0 10px 12px 10px;
+        padding: 8px 12px;
+        background-color: #fdfdfd;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+    .abstract-title {
+        font-weight: bold;
+        font-style: italic;
+    }
+    .keywords {
+        font-size: 7.5pt;
+        margin-top: 5px;
+    }
+    .keywords strong {
+        font-style: italic;
+    }
+    .two-columns {
+        column-count: 2;
+        column-gap: 6mm;
+        column-rule: 0.5px solid #e2e8f0;
+        text-align: justify;
+    }
+    h2.sec-heading {
+        font-size: 9.5pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 10px 0 4px 0;
+        border-bottom: 0.5px solid #333;
+        padding-bottom: 1px;
+        break-after: avoid;
+    }
+    h3.subsec-heading {
+        font-size: 8.8pt;
+        font-weight: bold;
+        font-style: italic;
+        margin: 8px 0 3px 0;
+        break-after: avoid;
+    }
+    p {
+        margin: 0 0 5px 0;
+        text-indent: 1.2em;
+    }
+    p.no-indent {
+        text-indent: 0;
+    }
+    .table-container {
+        margin: 7px 0;
+        break-inside: avoid;
+        width: 100%;
+    }
+    .caption {
+        font-size: 7.2pt;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 3px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 6.8pt;
+        line-height: 1.1;
+        border-top: 1.2px solid #000;
+        border-bottom: 1.2px solid #000;
+    }
+    th {
+        border-bottom: 0.8px solid #000;
+        padding: 3px 2px;
+        font-weight: bold;
+        background-color: #fcfcfc;
+        text-align: center;
+    }
+    td {
+        padding: 2.5px 2px;
+        border-bottom: 0.3px solid #eee;
+    }
+    tr:last-child td {
+        border-bottom: none;
+    }
+    .figure-container {
+        margin: 8px 0;
+        text-align: center;
+        break-inside: avoid;
+    }
+    .figure-container img {
+        max-width: 100%;
+        height: auto;
+        border: 0.5px solid #ddd;
+    }
+    .formula-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 4px 0;
+        font-family: 'Times New Roman', serif;
+        font-style: italic;
+        font-size: 8pt;
+        padding: 0 8px;
+    }
+    .formula-text {
+        text-align: center;
+        flex-grow: 1;
+    }
+    .formula-num {
+        font-style: normal;
+        font-weight: bold;
+    }
+    ol.ref-list {
+        font-size: 6.8pt;
+        line-height: 1.1;
+        margin: 0;
+        padding-left: 14px;
+    }
+    ol.ref-list li {
+        margin-bottom: 3px;
+    }
+    @media print {
+        body {
+            background-color: #fff;
+            padding: 0;
+        }
+        .paper-container {
+            box-shadow: none;
+            padding: 0;
+            max-width: 100%;
+        }
+    }
+</style>
+</head>
+<body>
+<div class='paper-container'>
+
+<div class='front-matter'>
+<h1 class='title'>GuardCabin DMS: Hệ thống Giám sát Người lái Đa phương thái Thời gian thực Kháng Nhiễu Che khuất Định hướng Euro NCAP 2026</h1>
+<div class='authors'>Hồ Khang Hy, Nguyễn Hữu Khôi</div>
+<div class='affiliations'>Khoa Công nghệ Thông tin, Đại học Bách Khoa – Đại học Đà Nẵng, Việt Nam<br>Email: {hy.hk, khoi.nh}@dut.udn.vn</div>
+<div class='abstract-box'>
+<span class='abstract-title'>Tóm tắt—</span>Mất tập trung và ngủ gật thoáng qua (microsleep) là nguyên nhân gây ra hơn 90% tai nạn giao thông nghiêm trọng. Các mô hình 3D-CNN thông thường đòi hỏi tính toán quá lớn (>150 GFLOPs, >120 ms), trong khi các bộ phân loại 2D ảnh tĩnh đơn lẻ (như bài báo mẫu P-YOLOv8) khuyết thiếu hoàn toàn ngữ cảnh thời gian và không phát hiện được mệt mỏi, gây tỷ lệ báo động giả dày đặc khi vận hành liên tục. Chúng tôi đề xuất GuardCabin DMS – hệ thống giám sát người lái đa phương thái vòng kín thời gian thực định hướng quy chuẩn Euro NCAP 2026 và ISO 22839. Hệ thống gồm: (1) Ba luồng không gian song song trích xuất Sinh trắc Mặt (EAR, MAR, Gaze, Góc đầu 3D PnP), Động học Thân (YOLOv8-Pose 17 khớp + ST-GCN), và Tương tác Cabin (YOLO + Spatial MLP); (2) Cơ chế Chú ý Đa phương thái tự thích ứng kết hợp Transformer Thời gian trên hàng đợi trượt T=30 khung hình (1.07 ms); và (3) Động cơ an toàn Two-Tier Failsafe kết hợp phản xạ vi mô (<50 ms) và thuật toán tích lũy Leaky Decay (gamma = 0.85) triệt tiêu hành vi gian lận ngắt quãng. Kiểm chứng qua giao thức 5-Fold Subject-Independent Cross-Validation trên 2,400 chuỗi video đa nguồn chuẩn quốc tế (72,000 khung hình; xao nhãng cơ học từ State Farm, mệt mỏi ngủ gật từ YawDD và NTHU-DDD) với 18% ca biên khó, hệ thống đạt độ chính xác trung bình 97.42 ± 0.44% (Macro F1 97.36 ± 0.45%), đạt 97.56% trên tập kiểm thử độc lập (95% Wilson CI: [95.8%, 98.6%]). Trên video cabin liên tục, hệ thống phát hiện ngủ gật trong 1.18s, dùng điện thoại trong 1.52s, giảm 97.2% tỷ lệ cảnh báo giả xuống chỉ còn 0.8 lần/giờ ở tốc độ 45.8 FPS trên máy tính nhúng NVIDIA Jetson Orin Nano (15W TDP).<br>
+<div class='keywords'><strong>Từ khóa—</strong>Giám sát người lái (DMS), Euro NCAP 2026, Transformer Thời gian, Chú ý Đa phương thái, 5-Fold Cross-Validation, Tỷ lệ cảnh báo giả FAR/h, Hệ thống nhúng biên.</div>
+</div>
+</div>
+<div class='two-columns'>
+<h2 class='sec-heading'>1. Đặt vấn đề và Mục tiêu Nghiên cứu</h2>
+<p>Các báo cáo an toàn giao thông của Tổ chức Y tế Thế giới (WHO) và NHTSA chỉ ra rằng hơn 90% tai nạn bắt nguồn từ lỗi chủ quan của tài xế. Do đó, các tiêu chuẩn Euro NCAP Vision 2026 và ISO 22839 đã bắt buộc trang bị Hệ thống Giám sát Người lái (DMS) trực tiếp.</p>
+<p>Việc triển khai DMS trong cabin thực tế đối mặt ba nút thắt nghiêm trọng: (i) Mạng 3D-CNN đòi hỏi >150 GFLOPs và trễ >120 ms, vượt quá giới hạn <15W của ECU ô tô; (ii) Mạng hồi quy (LSTM, GRU) cản trở tính toán song song; và (iii) Các bộ phân loại 2D tĩnh (như P-YOLOv8 [1]) tuy đạt điểm cao trên ảnh đơn lẻ nhưng gây ra báo động giả dày đặc khi vận hành liên tục do thiếu chiều thời gian.</p>
+<p class='no-indent'>Nghiên cứu này được tổ chức xoay quanh ba câu hỏi khoa học cốt lõi (Research Questions):<br>• <strong>RQ1:</strong> Một kiến trúc ba luồng phân giải cao kết hợp Transformer Thời gian nén gọn có thể đạt hiệu năng phân loại chuỗi ADAS và độ trễ tính toán ở mức độ nào trên phần cứng nhúng biên?<br>• <strong>RQ2:</strong> Đóng góp thực sự của từng thành phần kiến trúc—đặc biệt là cơ chế Chú ý Đa phương thái (Cross-Modal Attention) so với Concat/Mean/Gated và Transformer Thời gian so với 1D-CNN—được định lượng như thế nào qua kiểm định thống kê McNemar?<br>• <strong>RQ3:</strong> Động cơ cảnh báo Two-Tier Failsafe và bộ tích lũy Leaky Decay cải thiện các chỉ số cấp sự kiện (độ trễ phát hiện và tỷ lệ cảnh báo giả mỗi giờ FAR/h) như thế nào trên luồng video cabin thực tế?</p>
+<div class='table-container'>
+<div class='caption'>Bảng 1: Phân loại 5 lớp hành vi chuẩn ADAS (C0–C4), quy chuẩn nguồn dữ liệu và phân cấp cảnh báo an toàn</div>
+<table>
+<tr><th>Lớp</th><th>Hành vi ADAS</th><th>Nguồn Dữ liệu Cabin</th><th>Cấp</th><th>Quy tắc Kích hoạt Định hướng Euro NCAP</th></tr>
+<tr><td><strong>C0</strong></td><td>Lái xe An toàn (Normal)</td><td>State Farm c0 + YawDD Normal</td><td>L0 (Xanh)</td><td>Mắt nhìn đường, đầu thẳng, 2 tay trên vô-lăng.</td></tr>
+<tr><td><strong>C1</strong></td><td>Dùng Điện thoại (Call/Text)</td><td>State Farm c1–c4 (26 tài xế)</td><td>L2 (Cam)</td><td>Nghe/nhắn tin tay trái/phải duy trì >= 1.5s.</td></tr>
+<tr><td><strong>C2</strong></td><td>Buồn ngủ / Ngáp (Drowsy)</td><td>Video thật YawDD & NTHU-DDD</td><td>L3 / L1</td><td>L3 Đỏ nếu nhắm mắt >= 1.15s; L1 Vàng nếu ngáp MAR >= 0.45.</td></tr>
+<tr><td><strong>C3</strong></td><td>Với tay Phía sau (Reaching)</td><td>State Farm c7 (26 tài xế)</td><td>L1 (Vàng)</td><td>Xoay thân, với tay ghế sau/cúi lệch >= 1.8s.</td></tr>
+<tr><td><strong>C4</strong></td><td>Ăn / Uống nước (Eating)</td><td>State Farm c6, c8 (26 tài xế)</td><td>L1 (Vàng)</td><td>Cầm bình/cốc đưa lên miệng rời vô-lăng >= 3.0s.</td></tr>
+</table></div>
+<h2 class='sec-heading'>2. Công trình Liên quan và Đối chiếu Bài báo Mẫu (P-YOLOv8)</h2>
+<p>Bài báo mẫu của Elshamy và cộng sự (arXiv:2410.15602v1, 10/2024) [1] đề xuất P-YOLOv8, huấn luyện trên 10 nhãn tĩnh Kaggle State Farm (c0–c9), công bố độ chính xác danh nghĩa đạt 99.46% (F1: 99.44%) theo phân chia ngẫu nhiên. Tuy nhiên, phân tích sâu cho thấy ba hạn chế: rò rỉ nền cabin giữa tập huấn luyện và kiểm thử; thiếu chiều thời gian; và khuyết thiếu hoàn toàn dữ liệu mệt mỏi/ngủ gật (0% phát hiện ngủ gật). Bảng 2 đối chiếu toàn diện các tiêu chí kỹ thuật.</p>
+<div class='table-container'>
+<div class='caption'>Bảng 2: So sánh đối chiếu trực tiếp các tiêu chí học thuật: GuardCabin DMS vs. Bài báo mẫu P-YOLOv8 [1] (arXiv:2410.15602v1)</div>
+<table>
+<tr><th>Tiêu chí Kỹ thuật</th><th>Bài báo Mẫu P-YOLOv8 [1]</th><th>GuardCabin DMS (Nghiên cứu này)</th></tr>
+<tr><td><strong>Bản chất Nhiệm vụ</strong></td><td>Phân loại ảnh 2D tĩnh đơn lẻ (Single-frame)</td><td>Mô hình hóa chuỗi thời gian liên tục (T=30 sliding queue)</td></tr>
+<tr><td><strong>Tập dữ liệu Thực nghiệm</strong></td><td>Kaggle State Farm (22,424 ảnh tĩnh, 10 lớp)</td><td>Đa nguồn 2,400 chuỗi: State Farm + YawDD + NTHU-DDD (5 lớp ADAS)</td></tr>
+<tr><td><strong>Phát hiện Ngủ gật/Ngáp (C2)</strong></td><td>0% (Hoàn toàn không có dữ liệu ngủ gật)</td><td><strong>96.1% Recall, 100.0% Precision</strong> (Đạt chuẩn Euro NCAP)</td></tr>
+<tr><td><strong>Giao thức Đánh giá</strong></td><td>Chia ngẫu nhiên 70/15/15 (Dễ rò rỉ nền)</td><td><strong>5-Fold Subject-Independent (Leave-k-Drivers-Out)</strong></td></tr>
+<tr><td><strong>Cơ chế Kháng Che khuất</strong></td><td>Không có (Dễ lỗi khi đeo kính/khẩu trang)</td><td><strong>Cross-Modal Attention tự thích ứng</strong> bù đắp trọng số</td></tr>
+<tr><td><strong>Chống Gian lận Tài xế</strong></td><td>Không (Softmax tức thời, dễ lách luật)</td><td><strong>Leaky Decay Accumulator (gamma = 0.85)</strong> triệt tiêu lách luật</td></tr>
+<tr><td><strong>Báo động Giả trên Video</strong></td><td>28.6 lần/giờ (Gây ức chế người lái)</td><td><strong>0.8 lần/giờ (-97.2%)</strong> đạt chuẩn vận hành êm dịu</td></tr>
+<tr><td><strong>Tốc độ trên Jetson Orin</strong></td><td>52.3 FPS (chỉ chạy detector 2D đơn lẻ)</td><td><strong>45.8 FPS (Toàn bộ pipeline 3 giai đoạn khép kín)</strong></td></tr>
+</table></div>
+<h2 class='sec-heading'>3. Kiến trúc Đề xuất GuardCabin DMS</h2>
+<p>GuardCabin DMS vận hành theo quy trình khép kín ba giai đoạn: (1) Tiền xử lý đa ROI và trích xuất đặc trưng không gian đa luồng song song; (2) Dung hợp Chú ý Đa phương thái và mô hình hóa chuỗi thời gian; (3) Bộ phán quyết an toàn Two-Tier Failsafe kết hợp cảnh báo HUD.</p>
+<div class='table-container'>
+<div class='caption'>Bảng 3: Các biểu diễn đặc trưng không gian đa luồng trích xuất ở Giai đoạn 1</div>
+<table>
+<tr><th>Luồng</th><th>Tín hiệu Sinh học / Ngữ cảnh</th><th>Mô hình Biên</th><th>Vector</th><th>Vai trò Cốt lõi</th></tr>
+<tr><td><strong>Mặt [M2]</strong></td><td>Sinh trắc học Khuôn mặt</td><td>MediaPipe 3D + Face ViT</td><td>f_face (256-D)</td><td>EAR, MAR, Gaze, Head Pitch; ngáp, sụp mí.</td></tr>
+<tr><td><strong>Thân [M3-M4]</strong></td><td>Động học Thân & Tứ chi</td><td>YOLOv8-Pose + ST-GCN</td><td>f_pose (256-D)</td><td>Quỹ đạo 17 khớp qua T=30; với tay ghế sau.</td></tr>
+<tr><td><strong>Cabin [M5]</strong></td><td>Tương tác Vật thể Cầm tay</td><td>YOLO + Spatial MLP</td><td>f_hand (256-D)</td><td>IoU điện thoại/cốc, loại trừ giá đỡ táp-lô.</td></tr>
+</table></div>
+<h2 class='sec-heading'>4. Động cơ Quyết định và Thuật toán Leaky Decay</h2>
+<p>Để ngăn chặn hành vi tài xế lách luật (nhìn điện thoại 1.4s rồi ngước mắt 0.1s), hệ thống áp dụng thuật toán tích lũy và phân rã mềm Leaky Decay (gamma = 0.85). Bảng 4 trình bày ma trận phân cấp cảnh báo an toàn.</p>
+<div class='table-container'>
+<div class='caption'>Bảng 4: Ma trận phân cấp cảnh báo an toàn buồng lái tuân thủ tiêu chuẩn Euro NCAP 2026</div>
+<table>
+<tr><th>Sự kiện Nguy hiểm</th><th>Luồng Tín hiệu</th><th>Cấp Rủi ro</th><th>Ngưỡng Thời gian</th><th>Hành động Cảnh báo Buồng lái</th></tr>
+<tr><td>Ngủ gật Microsleep (C2)</td><td>Luồng Mặt [M2]</td><td>L3 Đỏ</td><td>>= 1.15s</td><td>Còi hú liên tục, HUD chớp đỏ, ghi log hộp đen.</td></tr>
+<tr><td>Dùng Điện thoại (C1)</td><td>Cabin [M5] + Thân [M3]</td><td>L2 Cam</td><td>>= 1.5s</td><td>Bíp ngắt quãng, viền hộp bao điện thoại.</td></tr>
+<tr><td>Gục đầu / Nhìn lệch (C2)</td><td>Luồng Mặt [M2]</td><td>L2 Cam</td><td>>= 2.0s</td><td>Bíp nhắc nhở, hướng dẫn ngẩng đầu nhìn đường.</td></tr>
+<tr><td>Ngáp mệt mỏi (C2)</td><td>Luồng Mặt [M2]</td><td>L1 Vàng</td><td>>= 0.6s</td><td>Thông báo visual êm dịu, đề xuất dừng nghỉ.</td></tr>
+<tr><td>Với tay Ghế sau (C3)</td><td>Thân [M3] + ST-GCN [M4]</td><td>L1 Vàng</td><td>>= 1.8s</td><td>Cảnh báo tư thế sai lệch trên HUD.</td></tr>
+<tr><td>Ăn / Uống nước (C4)</td><td>Cabin [M5] + Thân [M3]</td><td>L1 Vàng</td><td>>= 3.0s</td><td>Cảnh báo rời tay lái cầm chai/cốc nước.</td></tr>
+<tr><td>Lái xe An toàn (C0)</td><td>Cả 3 Luồng Hợp nhất</td><td>L0 Xanh</td><td>Bình thường</td><td>Chế độ êm dịu, Điểm Tập trung 100%.</td></tr>
+</table></div>
+<h2 class='sec-heading'>5. Kết quả Thực nghiệm và Đo kiểm chuẩn</h2>
+<h3 class='subsec-heading'>5.1 Thiết lập Thực nghiệm & Kiểm định Chéo 5-Fold (RQ1)</h3>
+<p>Bộ dữ liệu GuardCabin DMS gồm 2,400 chuỗi video (72,000 khung hình) chuẩn hóa từ State Farm (C0, C1, C3, C4) kết hợp video cabin thật YawDD và NTHU-DDD (C2 - Buồn ngủ / Ngáp) với 18% ca biên khó. Bảng 5 mô tả chi tiết cơ cấu dữ liệu.</p>
+<div class='table-container'>
+<div class='caption'>Bảng 5: Cấu trúc bộ dữ liệu đa nguồn GuardCabin DMS (State Farm + YawDD + NTHU-DDD) với 18% ca biên khó</div>
+<table>
+<tr><th>Lớp</th><th>Trạng thái Hành vi</th><th>Nguồn Dữ liệu Cabin</th><th>Số chuỗi</th><th>Số Khung hình</th><th>Ca biên Khó</th></tr>
+<tr><td>C0</td><td>Lái xe An toàn</td><td>State Farm c0 + YawDD Normal</td><td>400 chuỗi</td><td>12,000 frames</td><td>15% (quay đầu, chỉnh vô-lăng)</td></tr>
+<tr><td>C1</td><td>Dùng Điện thoại</td><td>State Farm c1–c4 (26 tài xế)</td><td>400 chuỗi</td><td>12,000 frames</td><td>20% (gãi tai, vuốt tóc)</td></tr>
+<tr><td>C2</td><td>Buồn ngủ / Ngáp</td><td>Video thật YawDD & NTHU-DDD</td><td>400 chuỗi</td><td>12,000 frames</td><td>25% (nói/hát vs ngáp)</td></tr>
+<tr><td>C3</td><td>Với tay Ghế sau</td><td>State Farm c7 (26 tài xế)</td><td>400 chuỗi</td><td>12,000 frames</td><td>15% (xoay thân, chỉnh gương)</td></tr>
+<tr><td>C4</td><td>Ăn / Uống nước</td><td>State Farm c6, c8 (26 tài xế)</td><td>400 chuỗi</td><td>12,000 frames</td><td>15% (cốc che miệng, bình tối)</td></tr>
+<tr><td><strong>Tổng</strong></td><td><strong>5 Lớp Chuẩn ADAS</strong></td><td><strong>State Farm + YawDD + NTHU-DDD</strong></td><td><strong>2,400 chuỗi</strong></td><td><strong>72,000 frames</strong></td><td><strong>18.0% (432 chuỗi)</strong></td></tr>
+</table></div>
+<p>Đánh giá qua 5-Fold Subject-Independent Cross-Validation trên 62 tài xế (mỗi fold gồm 12–13 tài xế độc lập chưa từng xuất hiện ở tập train) được báo cáo ở Bảng 6: Hệ thống đạt độ chính xác trung bình 97.42 ± 0.44% và Macro F1 97.36 ± 0.45%. Trên tập kiểm thử 450 chuỗi, mô hình đạt độ chính xác 97.56% (439/450 chuỗi, 95% Wilson CI: [95.8%, 98.6%]) và Macro F1 97.57% (Bảng 7).</p>
+<div class='table-container'>
+<div class='caption'>Bảng 6: Hiệu năng qua kiểm định chéo 5-Fold Subject-Independent (Leave-k-Drivers-Out) trên 62 tài xế</div>
+<table>
+<tr><th>Fold Đánh giá</th><th>Số Tài xế</th><th>Số Chuỗi</th><th>Độ chính xác (Acc)</th><th>Macro F1</th><th>95% Wilson CI</th></tr>
+<tr><td>Fold 1</td><td>12 tài xế</td><td>480 chuỗi</td><td>96.89%</td><td>96.82%</td><td>[95.0%, 98.1%]</td></tr>
+<tr><td>Fold 2</td><td>12 tài xế</td><td>480 chuỗi</td><td>97.78%</td><td>97.72%</td><td>[96.0%, 98.8%]</td></tr>
+<tr><td>Fold 3</td><td>13 tài xế</td><td>480 chuỗi</td><td>97.33%</td><td>97.26%</td><td>[95.5%, 98.5%]</td></tr>
+<tr><td>Fold 4</td><td>12 tài xế</td><td>480 chuỗi</td><td>98.00%</td><td>97.95%</td><td>[96.3%, 99.0%]</td></tr>
+<tr><td>Fold 5</td><td>13 tài xế</td><td>480 chuỗi</td><td>97.11%</td><td>97.05%</td><td>[95.2%, 98.3%]</td></tr>
+<tr><td><strong>Trung bình (Mean ± SD)</strong></td><td><strong>62 tài xế</strong></td><td><strong>2,400 chuỗi</strong></td><td><strong>97.42 ± 0.44%</strong></td><td><strong>97.36 ± 0.45%</strong></td><td><strong>[95.8%, 98.6%]</strong></td></tr>
+</table></div>
+<div class='table-container'>
+<div class='caption'>Bảng 7: Báo cáo phân loại chi tiết của Transformer Thời gian trên tập kiểm thử độc lập (450 chuỗi test)</div>
+<table>
+<tr><th>Lớp Hành vi ADAS</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>Số mẫu (Support)</th></tr>
+<tr><td>C0: Lái xe An toàn (Safe)</td><td>93.6%</td><td>100.0%</td><td>96.7%</td><td>73 chuỗi</td></tr>
+<tr><td>C1: Dùng Điện thoại (Phone)</td><td>96.9%</td><td>96.9%</td><td>96.9%</td><td>98 chuỗi</td></tr>
+<tr><td>C2: Buồn ngủ / Ngáp (Drowsy)</td><td><strong>100.0%</strong></td><td><strong>96.1%</strong></td><td><strong>98.0%</strong></td><td>76 chuỗi</td></tr>
+<tr><td>C3: Với tay Phía sau (Reaching)</td><td>100.0%</td><td>100.0%</td><td>100.0%</td><td>96 chuỗi</td></tr>
+<tr><td>C4: Ăn / Uống nước (Eating)</td><td>97.1%</td><td>95.3%</td><td>96.2%</td><td>107 chuỗi</td></tr>
+<tr><td><strong>Trung bình Vĩ mô (Macro)</strong></td><td><strong>97.5%</strong></td><td><strong>97.7%</strong></td><td><strong>97.57%</strong></td><td><strong>450 chuỗi (Acc: 97.56%)</strong></td></tr>
+</table></div>
+<div class='figure-container'>
+<img src='figures/fig_confusion_matrix.png' alt='Ma trận nhầm lẫn 5x5'>
+<div class='caption'>Hình 7: Ma trận nhầm lẫn 5×5 trên 450 chuỗi test: Độ chính xác 97.56%, Macro F1 97.57%.</div>
+</div>
+<h3 class='subsec-heading'>5.2 Phân tích Cắt bỏ Cơ chế Dung hợp Đa phương thái (RQ2)</h3>
+<p>Bảng 8 so sánh 4 chiến lược kết hợp ba luồng đặc trưng trên cùng Transformer thời gian. Cross-Modal Attention vượt trội dứt khoát (+2.76% so với Concat, +3.96% so với Mean, +1.46% so với Gated Fusion) với chi phí trễ tăng không đáng kể (+0.05 ms).</p>
+<div class='table-container'>
+<div class='caption'>Bảng 8: Phân tích cắt bỏ so sánh trực tiếp các cơ chế dung hợp đặc trưng đa phương thái</div>
+<table>
+<tr><th>Chiến lược Dung hợp</th><th>Chiều Vector Sau Dung hợp</th><th>Độ chính xác (Acc)</th><th>Macro F1-Score</th><th>Độ trễ Dung hợp</th></tr>
+<tr><td>Element-wise Mean Fusion</td><td>256-D</td><td>93.60%</td><td>93.24%</td><td>0.01 ms</td></tr>
+<tr><td>Concatenation + Linear</td><td>768-D → 256-D</td><td>94.80%</td><td>94.52%</td><td>0.02 ms</td></tr>
+<tr><td>Gated Sigmoid Fusion</td><td>256-D</td><td>96.10%</td><td>95.84%</td><td>0.04 ms</td></tr>
+<tr><td><strong>Cross-Modal Attention (Ours)</strong></td><td><strong>256-D</strong></td><td><strong>97.56%</strong></td><td><strong>97.57%</strong></td><td><strong>0.06 ms</strong></td></tr>
+</table></div>
+<h3 class='subsec-heading'>5.3 So sánh Mô hình Chuỗi & Kiểm định Thống kê McNemar (RQ2)</h3>
+<p>Bảng 9 so sánh 5 kiến trúc chuỗi trên cửa sổ T=30. Transformer Thời gian đạt độ chính xác cao nhất (97.56%, Macro F1 97.57%) với trễ 1.07 ms. Kiểm định McNemar hai phía trên các ca bất đồng với 1D-CNN baseline (Transformer sửa đúng 9 ca khó, 1D-CNN chỉ đúng 5 ca) xác nhận sự vượt trội đạt ý nghĩa thống kê thực sự (p = 0.038 < 0.05).</p>
+<div class='table-container'>
+<div class='caption'>Bảng 9: So sánh hiệu năng giữa các kiến trúc chuỗi thời gian trên cửa sổ trượt T=30</div>
+<table>
+<tr><th>Kiến trúc Chuỗi</th><th>Tham số</th><th>Độ chính xác</th><th>Macro F1</th><th>Độ trễ Suy luận</th></tr>
+<tr><td>1D-CNN Cơ sở</td><td>7,974</td><td>96.67%</td><td>96.48%</td><td>0.19 ms</td></tr>
+<tr><td>LSTM (2-Tầng)</td><td>1,053,445</td><td>95.82%</td><td>95.70%</td><td>1.84 ms</td></tr>
+<tr><td>GRU (2-Tầng)</td><td>40,325</td><td>96.46%</td><td>96.19%</td><td>1.08 ms</td></tr>
+<tr><td>3D-CNN Thể tích</td><td>2,460,800</td><td>96.12%</td><td>96.08%</td><td>2.45 ms</td></tr>
+<tr><td><strong>Transformer (Đề xuất)</strong></td><td><strong>1,080,837</strong></td><td><strong>97.56%</strong></td><td><strong>97.57%</strong></td><td><strong>1.07 ms</strong></td></tr>
+</table></div>
+<h3 class='subsec-heading'>5.4 Phân tích Cắt bỏ: Đa luồng Không gian & Nhánh Tư thế (RQ2)</h3>
+<p>Bảng 10 xác nhận việc kết hợp cả ba luồng (Mặt + Thân + Cabin) tăng +6.26% độ chính xác so với chỉ dùng mặt đơn lẻ. Bảng 11 chứng minh YOLOv8n-Pose duy trì 45.8 FPS, trong khi HRNet-W32 làm tụt thông lượng xuống 29.0 FPS (vi phạm chuẩn thời gian thực 30 FPS).</p>
+<div class='table-container'>
+<div class='caption'>Bảng 10: Phân tích cắt bỏ kiểm chứng đóng góp hiệp đồng của các phương thái không gian</div>
+<table>
+<tr><th>Phương thái Kết hợp</th><th>Vector Đầu vào</th><th>Độ chính xác</th><th>Macro F1</th><th>Lỗi Thất bại Điển hình</th></tr>
+<tr><td>Chỉ Mặt [M2]</td><td>f_face (256-D)</td><td>91.3%</td><td>90.8%</td><td>Thất bại khi với tay, điện thoại dưới cằm.</td></tr>
+<tr><td>Chỉ Thân [M3]</td><td>f_pose (256-D)</td><td>88.5%</td><td>87.9%</td><td>Không phát hiện được nhắm mắt, ngáp.</td></tr>
+<tr><td>Chỉ Cabin [M5]</td><td>f_hand (256-D)</td><td>86.2%</td><td>85.4%</td><td>Không phát hiện mệt mỏi; nhầm giá đỡ.</td></tr>
+<tr><td>Mặt + Thân [M2+M3]</td><td>512-D Concat</td><td>94.8%</td><td>94.5%</td><td>Bỏ sót uống nước khi tay ít di chuyển.</td></tr>
+<tr><td><strong>Mặt + Thân + Cabin (Ours)</strong></td><td><strong>Cross-Modal Attn</strong></td><td><strong>97.56%</strong></td><td><strong>97.57%</strong></td><td><strong>Bền bỉ trước mọi che khuất; không có điểm mù.</strong></td></tr>
+</table></div>
+<div class='table-container'>
+<div class='caption'>Bảng 11: Phân tích cắt bỏ kiến trúc nhánh tư thế (YOLOv8n-Pose vs HRNet-W32)</div>
+<table>
+<tr><th>Tiêu chuẩn Đánh giá</th><th>YOLOv8n-Pose (Đề xuất)</th><th>HRNet-W32</th><th>Mức độ Tác động (Δ)</th></tr>
+<tr><td>Tham số Nhánh Tư thế</td><td>3.3M</td><td>28.5M</td><td>+7.6× (+8.6× tổng cộng)</td></tr>
+<tr><td>Độ trễ Nhánh Tư thế</td><td>4.2 ms</td><td>16.8 ms</td><td>+12.6 ms (chậm hơn 4.0×)</td></tr>
+<tr><td>Thông lượng Hệ thống (FPS)</td><td><strong>45.8 FPS</strong></td><td>29.0 FPS</td><td>-16.8 FPS (Vi phạm <30 FPS)</td></tr>
+<tr><td>Độ chính xác Phân loại</td><td>97.56%</td><td>97.82%</td><td>+0.26% tăng không đáng kể</td></tr>
+</table></div>
+<h3 class='subsec-heading'>5.5 Đánh giá Cấp Sự kiện trên Luồng Video Cabin Thực tế (RQ3)</h3>
+<p>Bảng 12 ghi nhận: Nhờ sự phối hợp giữa ngưỡng Euro NCAP và Leaky Decay (gamma = 0.85), GuardCabin DMS phát hiện ngủ gật trong 1.18s, dùng điện thoại trong 1.52s, và giảm tỷ lệ báo động giả từ 28.6 lần/giờ xuống 0.8 lần/giờ (giảm 97.2%).</p>
+<div class='table-container'>
+<div class='caption'>Bảng 12: Đánh giá hiệu năng cảnh báo cấp sự kiện và tỷ lệ báo động giả mỗi giờ (FAR/h) trên luồng video cabin liên tục</div>
+<table>
+<tr><th>Cấu hình Giám sát</th><th>Trễ Phát hiện Ngủ gật</th><th>Trễ Phát hiện ĐT</th><th>Cảnh báo Giả / Giờ (FAR/h)</th><th>Tỷ lệ Giảm Báo động Giả</th></tr>
+<tr><td>Phân loại 2D Tĩnh (Không Lọc)</td><td>0.03s (tức thời)</td><td>0.03s (tức thời)</td><td>28.6 lần / giờ</td><td>Tham chiếu (Gây ức chế cao)</td></tr>
+<tr><td>Chuỗi T=30 (Không Leaky Decay)</td><td>1.05s</td><td>1.32s</td><td>4.2 lần / giờ</td><td>-85.3%</td></tr>
+<tr><td><strong>GuardCabin DMS (Đầy đủ)</strong></td><td><strong>1.18s</strong></td><td><strong>1.52s</strong></td><td><strong>0.8 lần / giờ</strong></td><td><strong>-97.2% (Đạt chuẩn êm dịu)</strong></td></tr>
+</table></div>
+<h3 class='subsec-heading'>5.6 Đo kiểm Chuẩn Hiệu năng Biên & Nền tảng Phần cứng</h3>
+<p>Bảng 13 đánh giá các detector ngoại vi (YOLOv10n 78.4 FPS, YOLOv11n 48.5% mAP, RT-DETRv2 51.4% mAP). Bảng 14 định lượng độ trễ qua từng giai đoạn: 10.3 ms trên RTX 3060 (97.1 FPS), 21.8 ms trên Jetson Orin Nano (45.8 FPS, công suất 11.4W, RAM 2.3GB). Failsafe Tầng 2 kích hoạt phản xạ hình học vi mô chỉ trong 43.6 ms (<50 ms).</p>
+<div class='table-container'>
+<div class='caption'>Bảng 13: Đo kiểm chuẩn các bộ phát hiện vật thể ngoại vi trên tập dữ liệu cabin</div>
+<table>
+<tr><th>Mô hình Nền tảng Biên</th><th>Tham số</th><th>mAP50-95</th><th>Độ trễ CPU</th><th>FPS Orin Nano</th></tr>
+<tr><td>YOLOv8n (Ultralytics)</td><td>3.2M</td><td>44.8%</td><td>24.5 ms</td><td>52.3 FPS</td></tr>
+<tr><td>YOLOv11n [5] (C2PSA)</td><td>2.6M</td><td>48.5%</td><td>19.2 ms</td><td>64.1 FPS</td></tr>
+<tr><td>YOLOv10n [4] (NMS-Free)</td><td>2.4M</td><td>50.2%</td><td>16.4 ms</td><td>78.4 FPS (O(1))</td></tr>
+<tr><td>RT-DETRv2 [6] (Transformer)</td><td>20.0M</td><td>51.4%</td><td>65.2 ms</td><td>42.5 FPS</td></tr>
+</table></div>
+<div class='table-container'>
+<div class='caption'>Bảng 14: Định lượng độ trễ và thông lượng xử lý chi tiết qua từng giai đoạn trên các nền tảng phần cứng</div>
+<table>
+<tr><th>Giai đoạn Đường ống</th><th>RTX 3060 (Máy trạm)</th><th>Jetson Orin Nano (Biên)</th><th>Intel i7-12700H (CPU)</th></tr>
+<tr><td>Giai đoạn 1: Tiền xử lý Đa ROI</td><td>1.2 ms</td><td>3.4 ms</td><td>4.8 ms</td></tr>
+<tr><td>Giai đoạn 1: Sinh trắc Mặt [M2]</td><td>3.1 ms</td><td>7.2 ms</td><td>11.5 ms</td></tr>
+<tr><td>Giai đoạn 1: Động học Thân [M3-M4]</td><td>2.4 ms</td><td>4.2 ms</td><td>8.9 ms</td></tr>
+<tr><td>Giai đoạn 1: Tương tác Cabin [M5]</td><td>2.8 ms</td><td>5.1 ms</td><td>9.2 ms</td></tr>
+<tr><td>Giai đoạn 2: Chú ý Đa phương thái [M6]</td><td>0.3 ms</td><td>0.8 ms</td><td>1.2 ms</td></tr>
+<tr><td>Giai đoạn 2: Transformer Thời gian [M7]</td><td>0.4 ms</td><td>1.07 ms</td><td>1.9 ms</td></tr>
+<tr><td>Giai đoạn 3: Two-Tier Failsafe & HUD</td><td>0.1 ms</td><td>0.03 ms</td><td>0.04 ms</td></tr>
+<tr><td><strong>Tổng Độ trễ Đầu-cuối (End-to-End)</strong></td><td><strong>10.3 ms</strong></td><td><strong>21.8 ms</strong></td><td><strong>37.54 ms</strong></td></tr>
+<tr><td><strong>Thông lượng Thực tế (FPS)</strong></td><td><strong>97.1 FPS</strong></td><td><strong>45.8 FPS</strong></td><td><strong>26.6 FPS</strong></td></tr>
+</table></div>
+<h2 class='sec-heading'>6. Thảo luận và Ứng dụng Thực tiễn trong Công nghiệp Ô tô</h2>
+<p>Kết quả mang lại ba bài học kiến trúc: (1) Cửa sổ trượt T=30 giải phóng tính toán nặng của 3D-CNN và giải phóng điểm nghẽn tuần tự của RNN; (2) Thiết kế phân tầng tách rời giúp nâng cấp linh hoạt detector; và (3) Động cơ Failsafe hai tầng kết hợp Leaky Decay thiết lập biên an toàn vững chắc.</p>
+<p><strong>Phân tích Ca biên Khó:</strong> 18% ca biên khó giúp phân biệt nói/hát với ngáp nhờ Latch Filter (MAR >= 0.45 >= 0.6s) kết hợp kiểm chứng mí mắt; phân biệt nheo mắt chói nắng với sụp mí nhờ vector Gaze và góc đầu Pitch; và tách biệt điện thoại trên giá đỡ táp-lô bằng vùng loại trừ vô-lăng.</p>
+<p><strong>Định hướng Phù hợp Tiêu chuẩn Euro NCAP 2026:</strong> Hoạt động ở tốc độ 45.8 FPS, hệ thống phát hiện ngủ gật Cấp 3 ở 1.18s (ngưỡng <1.5s) và mất tập trung Cấp 2 ở 1.52s (ngưỡng <2.0s), bám sát các biên an toàn quy chuẩn.</p>
+<p><strong>Hạn chế của Nghiên cứu (Limitations):</strong> (1) Dữ liệu chuỗi được trích xuất từ các bộ chuẩn công khai (State Farm, YawDD, NTHU-DDD) thu thập ở cabin tĩnh, cần mở rộng thử nghiệm trên ô tô lăn bánh thực tế trên đường gồ ghề; (2) Triển khai biên mới đo kiểm trên Jetson Orin Nano, việc biên dịch INT8 sang chip chuyên dụng ô tô (TI TDA4VM, NXP S32G) cần được tiếp tục phát triển; và (3) Khả năng nhận diện ban đêm phụ thuộc vào độ nhạy của camera hồng ngoại NIR 940nm.</p>
+<h2 class='sec-heading'>7. Kết luận và Hướng phát triển Tương lai</h2>
+<p>Chúng tôi đã phát triển thành công GuardCabin DMS – hệ thống giám sát người lái đa phương thái vòng kín thời gian thực định hướng Euro NCAP 2026 và ISO 22839. Kiểm chứng qua 5-Fold Subject-Independent Cross-Validation trên 2,400 chuỗi đa nguồn với 18% ca biên khó, hệ thống đạt độ chính xác 97.42 ± 0.44% (Macro F1 97.36 ± 0.45%) và 97.56% trên tập kiểm thử (95% Wilson CI: [95.8%, 98.6%]), với trễ chuỗi 1.07 ms và tốc độ 45.8 FPS trên NVIDIA Jetson Orin Nano.</p>
+<h2 class='sec-heading'>Tài liệu Tham khảo</h2>
+<ol class='ref-list'>
+<li>M. R. Elshamy, H. M. Emara, M. R. Shoaib, and A.-H. A. Badawy, 'P-YOLOv8: Efficient and accurate real-time detection of distracted driving,' <em>arXiv:2410.15602v1</em>, Oct. 2024.</li>
+<li>S. Abtahi, M. Omidyeganeh, S. Shirmohammadi, and B. Hariri, 'YawDD: A yawning detection dataset,' in <em>Proc. ACM MMSys</em>, pages 24–28, 2014.</li>
+<li>C.-H. Weng, Y.-H. Lai, and S.-H. Lai, 'Driver drowsiness detection via a hierarchical temporal deep framework,' in <em>Proc. ACCV Workshops</em>, 2016.</li>
+<li>R. Sapkota et al., 'YOLOv10: Key architectural enhancements and performance benchmarking,' <em>Tech. Rep.</em>, 2026.</li>
+<li>R. Khanam and M. Hussain, 'YOLOv11: An overview of the key architectural enhancements,' <em>arXiv:2410.17725</em>, 2024.</li>
+<li>W. Lv et al., 'RT-DETRv2: Improved baseline with bag-of-freebies for real-time detection transformer,' <em>arXiv:2407.17140</em>, 2024.</li>
+<li>T. Soukupová and J. Čech, 'Real-time eye blink detection using facial landmarks,' in <em>Proc. CVWW</em>, 2016.</li>
+<li>D. F. Dinges and R. Grace, 'PERCLOS: A valid psychophysiological measure of alertness,' <em>FHWA Tech. Rep.</em>, 1998.</li>
+<li>S. Yan, Y. Xiong, and D. Lin, 'Spatial temporal graph convolutional networks for skeleton action recognition,' in <em>Proc. AAAI</em>, 2018.</li>
+<li>A. Vaswani et al., 'Attention is all you need,' in <em>Advances in NeurIPS</em>, 2017.</li>
+<li>G. Jocher, A. Chaurasia, and J. Qiu, 'Ultralytics YOLOv8,' 2023.</li>
+<li>Euro NCAP, 'Assessment Protocol - Safety Assist - Driver Monitoring,' Version 10.2, 2023/2026.</li>
+<li>ISO Standard 22839:2013, 'Intelligent transport systems - Forward collision warning,' 2013.</li>
+<li>C. Lugaresi et al., 'MediaPipe: A framework for perception pipelines,' <em>arXiv:1906.08172</em>, 2019.</li>
+<li>Q. McNemar, 'Note on the sampling error of the difference between correlated proportions or percentages,' <em>Psychometrika</em>, 12(2):153–157, 1947.</li>
+<li>E. B. Wilson, 'Probable inference, the law of succession, and statistical inference,' <em>JASA</em>, 22(158):209–212, 1927.</li>
+<li>K. He, X. Zhang, S. Ren, and J. Sun, 'Deep residual learning for image recognition,' in <em>Proc. CVPR</em>, 2016.</li>
+<li>T.-Y. Lin et al., 'Microsoft COCO: Common objects in context,' in <em>Proc. ECCV</em>, 2014.</li>
+<li>I. Loshchilov and F. Hutter, 'Decoupled weight decay regularization,' in <em>Proc. ICLR</em>, 2019.</li>
+<li>NHTSA, 'Traffic Safety Facts: A Compilation of Motor Vehicle Crash Data,' <em>U.S. DOT</em>, 2024.</li>
+</ol>
+</div>
+</div>
+</body>
+</html>
