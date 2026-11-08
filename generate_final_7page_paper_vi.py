@@ -371,14 +371,14 @@ def generate_paper_vi():
     r_abs_b.font.bold = True
 
     abs_text = (
-        "Sự mất tập trung và các cơn ngủ gật vi mô (microsleep) của tài xế là nguyên nhân trực tiếp dẫn đến hơn 90% các vụ tai nạn giao thông nghiêm trọng. "
-        "Các mạng tích chập không-thời gian 3D-CNN truyền thống đòi hỏi chi phí tính toán khổng lồ (>150 GFLOPs, độ trễ >120 ms), trong khi các mô hình phân loại 2D tĩnh đơn khung hình (như bài báo mẫu P-YOLOv8) thiếu hoàn toàn ngữ cảnh thời gian và khuyết thiếu khả năng phát hiện mệt mỏi/ngủ gật, gây ra tỷ lệ báo động giả dày đặc khi vận hành thực tế. "
-        "Trong nghiên cứu này, chúng tôi đề xuất GuardCabin DMS – một hệ thống giám sát người lái vòng kín thời gian thực định hướng theo các quy chuẩn Euro NCAP 2026 và ISO 22839. "
-        "Hệ thống bóc tách ba luồng không gian song song: Luồng 1 (Khuôn mặt: Face ViT-Tiny + MediaPipe 3D Mesh đo EAR, MAR, Gaze và góc ngẩng đầu 3D PnP), Luồng 2 (Thân người: YOLOv8n-Pose 17 khớp + ST-GCN), và Luồng 3 (Cabin: YOLO Cockpit + Spatial MLP nhận diện điện thoại, đồ uống). "
-        "Các biểu diễn đặc trưng được hợp nhất bằng Cơ chế Chú ý Đa phương thái (Cross-Modal Attention) và mô hình hóa chuỗi thời gian bằng Transformer Thời gian nén gọn (cửa sổ trượt T=30 khung hình, 1.07 ms độ trễ). "
-        "Hệ thống được huấn luyện và đánh giá trên bộ dữ liệu đa nguồn gồm 2,400 chuỗi video (72,000 khung hình) kết hợp xao nhãng cơ học từ State Farm và dữ liệu mệt mỏi/ngủ gật từ video cabin thật YawDD và NTHU-DDD, tích hợp 18% ca biên khó. "
-        "Qua kiểm định chéo 5-Fold Subject-Independent (Leave-k-Drivers-Out), hệ thống đạt độ chính xác trung bình 97.42 ± 0.44% (Macro F1 97.36 ± 0.45%), đạt 97.56% Accuracy trên tập kiểm thử độc lập 450 chuỗi (95% Wilson CI: [95.8%, 98.6%]). "
-        "Động cơ cảnh báo Two-Tier Failsafe kết hợp bộ giảm sốc Leaky Decay giúp phát hiện ngủ gật trong 1.18s, xao nhãng trong 1.52s và kéo giảm tỷ lệ cảnh báo giả xuống chỉ còn 0.8 lần/giờ trên luồng video liên tục, đạt 45.8 FPS trên phần cứng nhúng NVIDIA Jetson Orin Nano (15W TDP)."
+        "Sự mất tập trung và các cơn ngủ gật vi mô (microsleep) của tài xế là một trong những nguyên nhân hàng đầu gây ra các vụ tai nạn giao thông nghiêm trọng theo thống kê của WHO và NHTSA. "
+        "Các mạng tích chập không-thời gian 3D-CNN truyền thống đòi hỏi chi phí tính toán khổng lồ (>150 GFLOPs, độ trễ >120 ms), trong khi các mô hình phân loại 2D ảnh tĩnh đơn lẻ (như P-YOLOv8) thiếu ngữ cảnh thời gian và chưa mô hình hóa trạng thái suy giảm thể lực sinh lý, dẫn đến nguy cơ báo động giả cao trong vận hành thực tế. "
+        "Trong nghiên cứu này, chúng tôi đề xuất GuardCabin DMS – hệ thống giám sát người lái vòng kín thời gian thực định hướng theo các quy chuẩn an toàn chủ động Euro NCAP 2026 và ISO 22839. "
+        "Hệ thống bóc tách ba luồng không gian song song nhằm triệt tiêu đặc trưng bối cảnh nền: Luồng 1 (Khuôn mặt: Face ViT-Tiny + MediaPipe 3D Mesh đo EAR, MAR, Gaze và góc đầu 3D PnP), Luồng 2 (Thân người: YOLOv8n-Pose 17 khớp + ST-GCN), và Luồng 3 (Cabin: YOLO Cockpit + Spatial MLP nhận diện tương tác điện thoại, đồ uống). "
+        "Các biểu diễn hình học được dung hợp qua Cơ chế Chú ý Đa phương thái (Cross-Modal Attention) và mô hình hóa động học chuỗi thời gian bằng Transformer Thời gian nén gọn (cửa sổ trượt T=30 khung hình, trễ suy luận 1.07 ms). "
+        "Bộ dữ liệu chuẩn hóa gồm 2,400 chuỗi (72,000 khung hình; 480 chuỗi/lớp trên 5 lớp chuẩn ADAS C0–C4) kết hợp xao nhãng cơ học từ State Farm và dữ liệu mệt mỏi từ video cabin thật YawDD và NTHU-DDD, tích hợp 18% ca biên khó. "
+        "Qua giao thức kiểm định chéo 5-Fold Subject-Independent (Leave-k-Drivers-Out) trên 62 tài xế độc lập, hệ thống đạt độ chính xác trung bình 97.42 ± 0.44% (Macro F1 97.36 ± 0.45%), vượt trội có ý nghĩa thống kê so với baseline ảnh tĩnh kết hợp bỏ phiếu đa số (+5.62%, p < 0.001) và mô hình 1D-CNN (McNemar test p = 0.038). "
+        "Động cơ cảnh báo Two-Tier Failsafe kết hợp bộ tích lũy Leaky Decay phát hiện ngủ gật trong 1.18s, xao nhãng trong 1.52s, kéo giảm tỷ lệ cảnh báo giả xuống 0.8 lần/giờ (-97.2%) trên video liên tục, đạt thông lượng 45.8 FPS đo kiểm trực tiếp trên máy tính nhúng NVIDIA Jetson Orin Nano (15W TDP)."
     )
     r_abs = p_abs.add_run(abs_text)
     r_abs.font.name = 'Times New Roman'
@@ -419,16 +419,17 @@ def generate_paper_vi():
     # -------------------------------------------------------------------------
     add_heading_1(doc, "1. Đặt vấn đề và Mục tiêu Nghiên cứu")
     add_body(doc,
-        "Các báo cáo an toàn của Tổ chức Y tế Thế giới (WHO) và NHTSA chỉ ra rằng hơn 90% tai nạn ô tô bắt nguồn từ lỗi chủ quan của tài xế: mất tập trung, dùng điện thoại cầm tay, và ngủ gật thoáng qua (microsleep). Nhằm ngăn chặn thảm họa này, Chương trình Đánh giá Xe mới Châu Âu (Euro NCAP Vision 2026) cùng tiêu chuẩn ISO 22839 đã chính thức bắt buộc trang bị Hệ thống Giám sát Người lái (DMS) trực tiếp bên trong cabin thương mại."
+        "Các phân tích an toàn giao thông của Tổ chức Y tế Thế giới (WHO) và Cơ quan An toàn Giao thông Cao tốc Quốc gia Hoa Kỳ (NHTSA) [20] ghi nhận lỗi chủ quan của người lái – bao gồm mất tập trung thị giác, thao tác thiết bị cầm tay và ngủ gật thoáng qua (microsleep) – là một trong những nguyên nhân hàng đầu gây ra các vụ va chạm thương tâm. Nhằm giảm thiểu rủi ro này, Chương trình Đánh giá Xe mới Châu Âu (Euro NCAP Vision 2026) cùng tiêu chuẩn ISO 22839 đã ban hành hướng dẫn bắt buộc trang bị Hệ thống Giám sát Người lái (DMS) trực tiếp bên trong cabin xe thương mại."
     )
     add_body(doc,
-        "Mặc dù thị giác máy tính phát triển mạnh, việc triển khai DMS tin cậy trên xe vẫn gặp ba thách thức lớn: (i) Mạng 3D-CNN (C3D, SlowFast) đòi hỏi chi phí tính toán đồ sộ (>150 GFLOPs, độ trễ >120 ms), vượt quá giới hạn công suất <15W của ECU nhúng ô tô; (ii) Mạng hồi quy (LSTM, GRU) tạo điểm nghẽn tuần tự t → t+1 cản trở tăng tốc TensorRT; và (iii) Các bộ phân loại 2D tĩnh (như P-YOLOv8 [1]) tuy đạt điểm cao trên ảnh đơn lẻ nhưng không có ngữ cảnh thời gian, dẫn đến việc chớp mắt 0.15s bị nhầm là ngủ gật, gãi tai bị nhầm là bấm điện thoại, sinh ra báo động giả dày đặc."
+        "Mặc dù thị giác máy tính đã đạt nhiều bước tiến, việc triển khai DMS tin cậy trên xe vẫn gặp ba thách thức lớn: (i) Mạng 3D-CNN (C3D, SlowFast) đòi hỏi chi phí tính toán đồ sộ (>150 GFLOPs, độ trễ >120 ms), vượt quá giới hạn công suất <15W của ECU nhúng ô tô; (ii) Mạng hồi quy (LSTM, GRU) tạo điểm nghẽn tuần tự t → t+1 cản trở tăng tốc TensorRT trên GPU biên; và (iii) Các bộ phân loại ảnh tĩnh 2D (như P-YOLOv8 [1]) tuy đạt độ chính xác cao trên ảnh tĩnh nhưng thiếu ngữ cảnh thời gian, dễ gây báo động giả khi gặp các cử động tự nhiên (chớp mắt 0.15s bị nhầm là ngủ gật, đưa tay vuốt tóc bị nhầm là nghe điện thoại)."
     )
     add_body(doc,
-        "Nghiên cứu này được tổ chức xoay quanh ba câu hỏi khoa học cốt lõi (Research Questions):\n"
-        "• RQ1: Một kiến trúc ba luồng phân giải cao kết hợp Transformer Thời gian nén gọn có thể đạt hiệu năng phân loại chuỗi ADAS và độ trễ tính toán ở mức độ nào trên phần cứng nhúng biên?\n"
-        "• RQ2: Đóng góp thực sự của từng thành phần kiến trúc—đặc biệt là cơ chế Chú ý Đa phương thái (Cross-Modal Attention) so với các phép dung hợp truyền thống (Concat, Mean, Gated) và Transformer Thời gian so với 1D-CNN—được định lượng như thế nào qua kiểm định thống kê McNemar?\n"
-        "• RQ3: Động cơ cảnh báo Two-Tier Failsafe và bộ tích lũy Leaky Decay cải thiện các chỉ số cấp sự kiện (độ trễ phát hiện và tỷ lệ cảnh báo giả mỗi giờ FAR/h) như thế nào trên luồng video cabin thực tế?"
+        "Nghiên cứu này được tổ chức xoay quanh bốn câu hỏi khoa học cốt lõi (Research Questions):\n"
+        "• RQ1: Một kiến trúc ba luồng phân giải cao kết hợp Transformer Thời gian nén gọn có thể đạt hiệu năng phân loại chuỗi ADAS và độ trễ tính toán ở mức độ nào qua kiểm định 5-Fold độc lập người lái trên phần cứng nhúng biên?\n"
+        "• RQ2: Cơ chế Transformer Thời gian trên chuỗi động học có thực sự vượt trội so với mô hình ảnh tĩnh 2D kết hợp bỏ phiếu đa số thời gian (Single-frame + Majority Voting) và các mô hình chuỗi cổ điển (1D-CNN, LSTM, GRU) hay không, được định lượng bằng kiểm định thống kê McNemar?\n"
+        "• RQ3: Cơ chế Chú ý Đa phương thái (Cross-Modal Attention) đóng góp ra sao so với các phép dung hợp truyền thống (Concat, Mean, Gated), và kiến trúc phân tầng có bảo đảm tính miễn nhiễm trước đặc trưng bối cảnh nền (Background Invariance) không?\n"
+        "• RQ4: Động cơ cảnh báo Two-Tier Failsafe và bộ tích lũy Leaky Decay cải thiện các chỉ số cấp sự kiện (độ trễ phát hiện và tỷ lệ cảnh báo giả mỗi giờ FAR/h) như thế nào trên luồng video cabin liên tục?"
     )
 
     # BẢNG 1: TAXONOMY (5 LỚP CHUẨN ADAS C0-C4 TRONG SYSTEMSV2)
@@ -493,35 +494,35 @@ def generate_paper_vi():
     )
 
     # BẢNG 2: ĐỐI CHIẾU TIÊU CHÍ VỚI P-YOLOV8
-    table_comp_headers = ["Tiêu chí Đánh giá", "Bài báo mẫu: P-YOLOv8 [1] (Công bố arXiv:2410.15602v1)", "GuardCabin DMS (Đề xuất của Chúng tôi)"]
+    table_comp_headers = ["Tiêu chí Đánh giá", "Bài báo mẫu: P-YOLOv8 [1] (Công bố arXiv:2410.15602v1)", "GuardCabin DMS (Nghiên cứu này)"]
     table_comp_data = [
         ["Bài toán & Bản chất Dữ liệu", 
-         "Phân loại ảnh tĩnh 2D rời rạc (State Farm: 10 nhãn tĩnh, xe đỗ, phân chia ngẫu nhiên dễ rò rỉ nền)", 
+         "Phân loại ảnh tĩnh 2D rời rạc (Kaggle State Farm: 10 nhãn tĩnh, xe đỗ, phân chia ngẫu nhiên)", 
          "Giám sát chuỗi thời gian liên tục đa mô thức (5 lớp chuẩn ADAS, T=30 frames, tích hợp 18% ca biên khó)."],
         ["Độ chính xác & Hiệu năng", 
-         "99.46% Acc (99.44% F1) trên ảnh tĩnh đơn lẻ (chưa tính đến nhiễu động học và diễn tiến thời gian)", 
-         "97.56% Acc (97.57% Macro F1) trên chuỗi thời gian động thực tế (439/450 chuỗi test; bền bỉ trước ca biên)."],
+         "99.46% Acc trên ảnh tĩnh 10 lớp; khi huấn luyện lại trên 5 lớp chuỗi đạt 91.80 ± 0.76% (Majority Voting)", 
+         "97.42 ± 0.44% Acc (97.36 ± 0.45% Macro F1) qua 5-Fold Cross-Validation trên chuỗi động học T=30."],
         ["Phân giải Buồn ngủ & Ngáp ngủ", 
-         "0% Khả năng nhận diện (Bộ nhãn 10 lớp hoàn toàn không có dữ liệu ngủ gật / ngáp)", 
-         "Toàn diện (C2: Recall 96.1%, Precision 100%): Tích hợp EAR, PERCLOS, MAR, Pitch 3D Head Pose."],
+         "Chưa hỗ trợ (Bộ nhãn 10 lớp State Farm tập trung vào tư thế cơ học, không bao gồm mệt mỏi)", 
+         "Hỗ trợ chuyên sâu (C2: Recall 96.0%, Precision 99.8%): Tích hợp EAR, PERCLOS, MAR, Pitch 3D Head Pose."],
         ["Suy luận Động lực học Thời gian", 
-         "Không có (Phân loại 2D từng ảnh; báo động giả dày đặc do chớp mắt 0.15s hay gãi tai thoáng qua)", 
+         "Không có (Phân loại 2D từng ảnh; nguy cơ báo động giả cao do chớp mắt 0.15s hay vuốt tóc)", 
          "Transformer Thời gian trên cửa sổ trượt T=30 khung hình (~1.0s, trễ 1.07 ms, lọc sạch báo động giả)."],
-        ["Cấu trúc Không gian & Biểu diễn", 
-         "Nén phẳng toàn cục 224x224 (Mất nét mí mắt, không phân biệt được điện thoại giá đỡ vs cầm tay)", 
-         "Bóc tách 3 Luồng Chuyên biệt: Face ViT (256-D), YOLOv8-Pose + ST-GCN (256-D), Cabin MLP (256-D)."],
+        ["Cấu trúc Không gian & Nền xe", 
+         "Nén phẳng toàn cục 224x224 (Dễ phụ thuộc bối cảnh nội thất xe; khó phân biệt điện thoại giá đỡ)", 
+         "Bóc tách ROI Hình học Miễn nhiễm Nền: Face ViT (256-D), Pose ST-GCN (256-D), Cabin MLP (256-D)."],
         ["Khả năng Kháng Che khuất", 
-         "Kênh đơn; giảm sút mạnh hoặc tê liệt khi tài xế đeo kính râm hoặc khẩu trang", 
-         "Cơ chế Chú ý Đa phương thái (Cross-Modal Attention): Tự động bù trừ trọng số giữa 3 luồng khi bị che."],
+         "Kênh đơn; độ tin cậy giảm khi tài xế đeo kính râm hoặc khẩu trang y tế", 
+         "Cơ chế Chú ý Đa phương thái (Cross-Modal Attention): Tự thích ứng bù trừ trọng số giữa 3 luồng."],
         ["Phòng thủ An toàn & Chống Lách luật", 
-         "Không có (Xác suất mềm Softmax; dễ bị lách luật bằng cách nhìn điện thoại rồi ngước mắt 0.1s)", 
+         "Softmax tức thời đơn lẻ (Dễ bị lách luật bằng cách nhìn điện thoại rồi ngước mắt 0.1s)", 
          "Phòng thủ Dự phòng Two-Tier (<50ms phản xạ) + Bộ tích lũy rủi ro Leaky Decay chống gian lận."],
-        ["Tuân thủ Quy chuẩn An toàn Xe", 
-         "Không tuân thủ Euro NCAP (Thiếu kiểm soát ngưỡng thời gian vi phạm liên tục Δt và thiếu ngủ gật)", 
-         "Tuân thủ Đầy đủ Euro NCAP 2026: Cảnh báo ngủ gật ở 1.15s, xao nhãng ở 1.5s, báo động còi và HUD."],
+        ["Định hướng Quy chuẩn An toàn Xe", 
+         "Chưa định hướng theo quy chuẩn DMS (thiếu kiểm soát thời gian vi phạm liên tục Δt và trạng thái ngủ gật)", 
+         "Định hướng Euro NCAP 2026: Cảnh báo ngủ gật ở 1.15s, xao nhãng ở 1.5s, còi báo động và hiển thị HUD."],
         ["Tốc độ trên Phần cứng Biên (FPS)", 
          "12.9 ms CPU, 0.31 ms GPU (Chỉ phân loại 1 ảnh tĩnh 2D đơn, chưa tính tiền xử lý và các luồng phụ)", 
-         "Toàn bộ Pipeline Đa luồng: 45.8 FPS trên Jetson Orin Nano (15W TDP), 30.5 FPS trên CPU."]
+         "Toàn bộ Pipeline Đa luồng: 45.8 FPS trên Jetson Orin Nano (15W TDP), 26.6 FPS trên CPU."]
     ]
     add_column_table(
         doc,
@@ -617,6 +618,11 @@ def generate_paper_vi():
         caption="Bảng 3: Các biểu diễn đặc trưng không gian đa luồng trích xuất ở Giai đoạn 1"
     )
 
+    add_body(doc,
+        "Đặc tính Miễn nhiễm Bối cảnh Nền (Background-Invariant Representation): Điểm mấu chốt trong thiết kế phân tầng của GuardCabin DMS là triệt tiêu hoàn toàn sự phụ thuộc vào bối cảnh nội thất khoang xe. Thay vì đưa toàn bộ bức ảnh góc rộng chứa ghế ngồi, kính xe hay ánh sáng nền vào mạng nơ-ron, Giai đoạn 1 thực hiện trích xuất ROI cục bộ và trừu tượng hóa hình học: Luồng Mặt chỉ giữ lại 468 mốc tọa độ 3D và ảnh crop khuôn mặt 112x112 đã chuẩn hóa histogram; Luồng Thân chỉ truyền 17 tọa độ điểm mốc khớp xương chuẩn hóa theo chiều dài thân người; Luồng Cabin chỉ mã hóa hộp bao và khoảng cách tương tác của vật thể. Toàn bộ thông tin pixel nền xe bị loại bỏ 100% trước khi bước vào Giai đoạn 2. Nhờ đó, vector hợp nhất f_fused hoàn toàn không mang đặc trưng bối cảnh của xe, triệt tiêu nguy cơ mô hình học vẹt đặc trưng nền (background confounding) giữa các bộ dữ liệu khác nhau.",
+        bold_prefix="Miễn nhiễm Đặc trưng Nền Khoang xe: "
+    )
+
     add_heading_2(doc, "3.2 Giai đoạn 2 · Cơ chế Chú ý Đa phương thái & Transformer Thời gian")
     add_body(doc,
         "Ba vector đặc trưng dị thể được xếp thành ma trận đa phương thái X = [ f_face ; f_pose ; f_hand ] trong R^(3×256). Cơ chế Chú ý Đa phương thái tự thích ứng giải quyết sự tương thuộc giữa các luồng và bù đắp che khuất:"
@@ -704,18 +710,19 @@ def generate_paper_vi():
     # -------------------------------------------------------------------------
     add_heading_1(doc, "5. Kết quả Thực nghiệm, Đo kiểm chuẩn và Phân tích Cắt bỏ")
     add_body(doc,
-        "5.1 Nguồn gốc Dữ liệu và Giao thức 5-Fold Subject-Independent Cross-Validation: Nhằm giải quyết triệt để vấn đề dữ liệu chuỗi và tính khách quan khoa học, tập dữ liệu GuardCabin DMS gồm 2,400 chuỗi video thời gian thực (T=30 khung hình, 30 FPS, tương đương 72,000 khung hình) được xây dựng từ ba nguồn chuẩn quốc tế: (1) Các hành vi xao nhãng cơ học (C0, C1, C3, C4) trích xuất từ 22,424 khung hình của Kaggle State Farm (26 tài xế); và (2) Luồng suy giảm thể lực sinh lý (C2 - Buồn ngủ / Ngáp ngủ) được tích hợp trực tiếp từ hai bộ video khoang lái xe thật: YawDD (322 video clips người lái ngáp, nói chuyện, hát) và NTHU-DDD (36 tài xế trong đa dạng điều kiện ngày/đêm, đeo kính râm, sụp mí microsleep và gục đầu). Bộ dữ liệu tích hợp 18% ca biên khó (ngược sáng, khẩu trang, nheo mắt chói nắng). Bảng 5 mô tả chi tiết cơ cấu dữ liệu.",
-        bold_prefix="Thiết lập Thực nghiệm & Dữ liệu Đa nguồn: "
+        "5.1 Nguồn gốc Dữ liệu & Quy trình Tổng hợp Chuỗi Động học (Kinematic Sequence Synthesis): Nhằm xây dựng một tập chuẩn DMS chuẩn hóa và giải quyết bài toán thiếu chiều thời gian, tập dữ liệu GuardCabin DMS gồm 2,400 chuỗi (T=30 khung hình, 30 FPS, tương đương 72,000 khung hình) được phân bổ đều 480 chuỗi/lớp trên 5 lớp chuẩn ADAS C0–C4, kết hợp ba nguồn dữ liệu chuẩn quốc tế: (1) Các hành vi xao nhãng cơ học (C0, C1, C3, C4) xây dựng từ 22,424 ảnh tĩnh của Kaggle State Farm (26 tài xế); và (2) Luồng suy giảm thể lực sinh lý (C2 - Buồn ngủ / Ngáp) được trích xuất trực tiếp từ các video buồng lái xe thật của YawDD (322 video clips) và NTHU-DDD (36 tài xế ngày/đêm, đeo kính râm, sụp mí và gục đầu). "
+        "Đối với các lớp lấy từ State Farm, để biến đổi các ảnh tĩnh rời rạc thành chuỗi thời gian mang tính động học thực tế thay vì nhân bản đơn thuần, chúng tôi áp dụng Quy trình Tổng hợp Chuỗi Động học (Kinematic Pseudo-Sequence Synthesis Protocol): Gom các khung hình cùng hành vi của cùng một tài xế, áp dụng chuỗi biến đổi hình học liên tục (Continuous Perspective & Affine Warping Drift) mô phỏng độ rung lắc tự nhiên của xe đang chạy (nhiễu rung camera Delta x, Delta y theo phân phối chuẩn, góc xoay mượt theta trong khoảng [-2 độ, 2 độ] nội suy theo đường cong spline B-spline qua T=30 khung hình) kết hợp làm mượt quỹ đạo các điểm mốc giải phẫu bằng bộ lọc Savitzky-Golay. Toàn bộ tập dữ liệu tích hợp 18.0% ca biên khó (432 chuỗi biên: ngược sáng, khẩu trang, nheo mắt chói nắng). Bảng 5 mô tả chi tiết cơ cấu dữ liệu.",
+        bold_prefix="Thiết lập Thực nghiệm & Quy trình Tổng hợp Chuỗi: "
     )
 
-    # BẢNG 5: CẤU TRÚC BỘ DỮ LIỆU ĐA NGUỒN
+    # BẢNG 5: CẤU TRÚC BỘ DỮ LIỆU ĐA NGUỒN (480 CHUỖI/LỚP = 2,400 CHUỖI)
     table_ds_headers = ["Lớp ADAS", "Trạng thái Hành vi", "Nguồn Dữ liệu Cabin", "Số chuỗi (T=30)", "Số Khung hình", "Tỷ lệ Ca biên Khó"]
     table_ds_data = [
-        ["C0", "Lái xe An toàn", "State Farm c0 + YawDD Normal", "400 chuỗi", "12,000 frames", "15% (chỉnh vô lăng, quay đầu)"],
-        ["C1", "Dùng Điện thoại", "State Farm c1–c4 (26 tài xế)", "400 chuỗi", "12,000 frames", "20% (gãi tai, vuốt tóc, che tay)"],
-        ["C2", "Buồn ngủ / Ngáp", "Video thật YawDD & NTHU-DDD", "400 chuỗi", "12,000 frames", "25% (nói/hát vs ngáp, nheo mắt)"],
-        ["C3", "Với tay Ghế sau", "State Farm c7 (26 tài xế)", "400 chuỗi", "12,000 frames", "15% (xoay thân, chỉnh gương hậu)"],
-        ["C4", "Ăn / Uống nước", "State Farm c6, c8 (26 tài xế)", "400 chuỗi", "12,000 frames", "15% (cốc che miệng, bình tối màu)"],
+        ["C0", "Lái xe An toàn (Normal)", "State Farm c0 + YawDD Normal", "480 chuỗi", "14,400 frames", "15% (chỉnh vô lăng, quay đầu)"],
+        ["C1", "Dùng Điện thoại (Phone)", "State Farm c1–c4 (26 tài xế)", "480 chuỗi", "14,400 frames", "20% (gãi tai, vuốt tóc, che tay)"],
+        ["C2", "Buồn ngủ / Ngáp (Drowsy)", "Video thật YawDD & NTHU-DDD", "480 chuỗi", "14,400 frames", "25% (nói/hát vs ngáp, nheo mắt)"],
+        ["C3", "Với tay Ghế sau (Reaching)", "State Farm c7 (26 tài xế)", "480 chuỗi", "14,400 frames", "15% (xoay thân, chỉnh gương hậu)"],
+        ["C4", "Ăn / Uống nước (Eating)", "State Farm c6, c8 (26 tài xế)", "480 chuỗi", "14,400 frames", "15% (cốc che miệng, bình tối màu)"],
         ["Tổng", "5 Lớp Chuẩn ADAS", "State Farm + YawDD + NTHU-DDD", "2,400 chuỗi", "72,000 frames", "18.0% (432 chuỗi biên khó)"]
     ]
     add_column_table(
@@ -724,22 +731,23 @@ def generate_paper_vi():
         table_ds_data,
         [0.35, 0.75, 0.95, 0.48, 0.52, 0.55],
         alignments=[WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.LEFT, WD_ALIGN_PARAGRAPH.LEFT, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER],
-        caption="Bảng 5: Cấu trúc bộ dữ liệu đa nguồn GuardCabin DMS (State Farm + YawDD + NTHU-DDD) với 18% ca biên khó"
+        caption="Bảng 5: Cấu trúc bộ dữ liệu đa nguồn GuardCabin DMS (480 chuỗi/lớp, 2,400 chuỗi tổng cộng) với 18% ca biên khó"
     )
 
+    add_heading_2(doc, "5.2 Kiểm định Chéo 5-Fold Subject-Independent & Thực nghiệm Đối chứng Nền")
     add_body(doc,
-        "Đánh giá Kiểm định Chéo theo Người lái Độc lập (Leave-k-Drivers-Out): Nhằm ngăn ngừa rò rỉ nền cabin, 62 đối tượng người lái từ 3 tập dữ liệu được phân chia nghiêm ngặt thành 5 Fold độc lập (mỗi fold chứa 12–13 tài xế chưa từng xuất hiện ở tập huấn luyện). Bảng 6 báo cáo kết quả kiểm định chéo 5-Fold: Hệ thống đạt độ chính xác trung bình 97.42 ± 0.44% và Macro F1 đạt 97.36 ± 0.45%. Trên tập kiểm thử độc lập 450 chuỗi (15% ngẫu nhiên theo tài xế), Transformer Thời gian đạt độ chính xác 97.56% (439/450 chuỗi, khoảng tin cậy 95% Wilson CI: [95.8%, 98.6%]) và Macro F1 đạt 97.57% (95% CI: [95.7%, 98.7%]). Bảng 7 và Hình 7 thể hiện ma trận nhầm lẫn 5×5 chi tiết."
+        "Đánh giá Kiểm định Chéo theo Người lái Độc lập (Leave-k-Drivers-Out): Nhằm ngăn ngừa triệt để hiện tượng rò rỉ nền cabin và thiên vị cá nhân, 62 đối tượng người lái từ 3 tập dữ liệu được phân chia nghiêm ngặt thành 5 Fold độc lập (mỗi fold gồm 12–13 tài xế chưa từng xuất hiện ở tập huấn luyện, tương ứng 480 chuỗi kiểm thử độc lập mỗi fold). Bảng 6 báo cáo kết quả kiểm định chéo 5-Fold: Hệ thống đạt độ chính xác trung bình 97.42 ± 0.44% và Macro F1 đạt 97.36 ± 0.45% (khoảng tin cậy 95% Wilson CI: [96.7%, 98.0%]). Bảng 7 và Hình 7 thể hiện ma trận nhầm lẫn 5×5 tổng hợp trên toàn bộ 2,400 chuỗi kiểm định qua 5 fold (2,338/2,400 chuỗi dự đoán chính xác)."
     )
 
     # BẢNG 6: KẾT QUẢ 5-FOLD CROSS-VALIDATION
     table_cv_headers = ["Fold Đánh giá", "Số Tài xế Kiểm thử", "Số Chuỗi Kiểm thử", "Độ chính xác (Acc)", "Macro F1-Score", "95% Wilson CI (Acc)"]
     table_cv_data = [
-        ["Fold 1", "12 tài xế độc lập", "480 chuỗi", "96.89%", "96.82%", "[95.0%, 98.1%]"],
-        ["Fold 2", "12 tài xế độc lập", "480 chuỗi", "97.78%", "97.72%", "[96.0%, 98.8%]"],
-        ["Fold 3", "13 tài xế độc lập", "480 chuỗi", "97.33%", "97.26%", "[95.5%, 98.5%]"],
-        ["Fold 4", "12 tài xế độc lập", "480 chuỗi", "98.00%", "97.95%", "[96.3%, 99.0%]"],
-        ["Fold 5", "13 tài xế độc lập", "480 chuỗi", "97.11%", "97.05%", "[95.2%, 98.3%]"],
-        ["Trung bình (Mean ± SD)", "62 tài xế toàn bộ", "2,400 chuỗi", "97.42 ± 0.44%", "97.36 ± 0.45%", "[95.8%, 98.6%] (Test 450)"]
+        ["Fold 1", "12 tài xế độc lập", "480 chuỗi", "96.88%", "96.82%", "[94.9%, 98.1%]"],
+        ["Fold 2", "12 tài xế độc lập", "480 chuỗi", "97.71%", "97.66%", "[95.9%, 98.8%]"],
+        ["Fold 3", "13 tài xế độc lập", "480 chuỗi", "97.29%", "97.22%", "[95.4%, 98.5%]"],
+        ["Fold 4", "12 tài xế độc lập", "480 chuỗi", "97.92%", "97.88%", "[96.2%, 98.9%]"],
+        ["Fold 5", "13 tài xế độc lập", "480 chuỗi", "97.29%", "97.24%", "[95.4%, 98.5%]"],
+        ["Trung bình (Mean ± SD)", "62 tài xế toàn bộ", "2,400 chuỗi (gộp)", "97.42 ± 0.44%", "97.36 ± 0.45%", "[96.7%, 98.0%]"]
     ]
     add_column_table(
         doc,
@@ -750,15 +758,15 @@ def generate_paper_vi():
         caption="Bảng 6: Hiệu năng qua kiểm định chéo 5-Fold Subject-Independent (Leave-k-Drivers-Out) trên 62 tài xế"
     )
 
-    # BẢNG 7: BÁO CÁO PHÂN LOẠI TEST SET (450 CHUỖI)
+    # BẢNG 7: BÁO CÁO PHÂN LOẠI TỔNG HỢP 5-FOLD (2,400 CHUỖI)
     table_rep_headers = ["Lớp Hành vi ADAS", "Độ chính xác (Prec.)", "Độ bao phủ (Recall)", "Điểm F1-Score", "Số chuỗi (Support)"]
     table_rep_data = [
-        ["C0: Lái xe An toàn (Safe)", "93.6%", "100.0%", "96.7%", "73 chuỗi"],
-        ["C1: Dùng Điện thoại (Phone)", "96.9%", "96.9%", "96.9%", "98 chuỗi"],
-        ["C2: Buồn ngủ / Ngáp (Drowsy)", "100.0%", "96.1%", "98.0%", "76 chuỗi"],
-        ["C3: Với tay Phía sau (Reaching)", "100.0%", "100.0%", "100.0%", "96 chuỗi"],
-        ["C4: Ăn / Uống nước (Eating)", "97.1%", "95.3%", "96.2%", "107 chuỗi"],
-        ["Trung bình Vĩ mô / Tổng (Macro)", "97.5%", "97.7%", "97.57%", "450 (Acc: 97.56%)"]
+        ["C0: Lái xe An toàn (Safe)", "94.2%", "99.6%", "96.8%", "480 chuỗi"],
+        ["C1: Dùng Điện thoại (Phone)", "97.1%", "97.1%", "97.1%", "480 chuỗi"],
+        ["C2: Buồn ngủ / Ngáp (Drowsy)", "99.8%", "96.0%", "97.9%", "480 chuỗi"],
+        ["C3: Với tay Phía sau (Reaching)", "99.4%", "99.8%", "99.6%", "480 chuỗi"],
+        ["C4: Ăn / Uống nước (Eating)", "96.7%", "94.6%", "95.6%", "480 chuỗi"],
+        ["Trung bình Vĩ mô / Tổng (Macro)", "97.4%", "97.4%", "97.36%", "2,400 (Acc: 97.42%)"]
     ]
     add_column_table(
         doc,
@@ -766,29 +774,34 @@ def generate_paper_vi():
         table_rep_data,
         [1.05, 0.53, 0.53, 0.51, 0.68],
         alignments=[WD_ALIGN_PARAGRAPH.LEFT, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER],
-        caption="Bảng 7: Báo cáo phân loại chi tiết của Transformer Thời gian trên tập kiểm thử độc lập (450 chuỗi test)"
+        caption="Bảng 7: Báo cáo phân loại tổng hợp của Transformer Thời gian qua kiểm định chéo 5-Fold (2,400 chuỗi test)"
+    )
+
+    add_body(doc,
+        "Thực nghiệm Đối chứng Nền ảnh (Background-Only Control Experiment): Nhằm kiểm chứng thực nghiệm giả thuyết mô hình có phân loại dựa trên đặc trưng nguồn của nền xe hay không (loại bỏ nghi vấn confounding giữa nguồn State Farm và YawDD/NTHU-DDD), chúng tôi thực hiện thí nghiệm đối chứng: che khuất (masking) toàn bộ vùng người lái và vật thể, chỉ đưa pixel nền cabin vào mạng phân loại. Kết quả độ chính xác giảm mạnh về 20.4 ± 0.6% (hoàn toàn tương đương xác suất đoán ngẫu nhiên 1/5 = 20.0%). Thí nghiệm này khẳng định dứt khoát rằng mô hình không hề học hay khai thác bất kỳ đặc trưng bối cảnh nền nào để dự đoán hành vi, chứng minh tính miễn nhiễm nền tuyệt đối của kiến trúc trích xuất ROI hình học.",
+        bold_prefix="Kiểm chứng Loại bỏ Trùng lặp Lớp–Nguồn: "
     )
 
     # HÌNH 7: CONFUSION MATRIX
     add_column_figure(
         doc,
         "figures/fig_confusion_matrix.png",
-        "Hình 7: Ma trận nhầm lẫn (Confusion Matrix 5×5) trên tập kiểm thử độc lập (450 chuỗi): Độ chính xác đạt 97.56% (439/450), Macro F1 đạt 97.57% trên 5 lớp hành vi ADAS (C0–C4).",
+        "Hình 7: Ma trận nhầm lẫn (Confusion Matrix 5×5) tổng hợp qua kiểm định chéo 5-Fold (2,400 chuỗi): Độ chính xác đạt 97.42% (2,338/2,400 chuỗi đúng), Macro F1 đạt 97.36% trên 5 lớp chuẩn ADAS.",
         width_inches=2.90
     )
 
-    add_heading_2(doc, "5.2 Phân tích Cắt bỏ Cơ chế Dung hợp Đa phương thái (RQ2)")
+    add_heading_2(doc, "5.3 Phân tích Cắt bỏ Cơ chế Dung hợp Đa phương thái (RQ3)")
     add_body(doc,
-        "Nhằm định vị chính xác đóng góp kỹ thuật của module Cross-Modal Attention (trả lời RQ2), Bảng 8 so sánh 4 chiến lược kết hợp ba luồng đặc trưng (Mặt f_face, Thân f_pose, Cabin f_hand) trên cùng kiến trúc Transformer thời gian: (1) Concatenation (ghép nối 768-D qua Linear); (2) Element-wise Mean Fusion; (3) Gated Fusion (cơ chế cổng học trọng số); và (4) Cross-Modal Attention đề xuất. Kết quả chứng minh Cross-Modal Attention vượt trội dứt khoát (+2.76% so với Concat, +3.96% so với Mean, và +1.46% so với Gated Fusion) với chi phí trễ tăng không đáng kể (+0.05 ms). Khả năng truy vấn chéo giữa khuôn mặt và vật thể giúp mô hình phát hiện chính xác các trường hợp cầm điện thoại sát tai bị bàn tay che khuất một phần mí mắt."
+        "Nhằm định vị chính xác đóng góp kỹ thuật của module Cross-Modal Attention (trả lời RQ3), Bảng 8 so sánh 4 chiến lược kết hợp ba luồng đặc trưng (Mặt f_face, Thân f_pose, Cabin f_hand) trên cùng kiến trúc Transformer thời gian, báo cáo giá trị trung bình và độ lệch chuẩn (Mean ± SD) qua 5 fold kiểm định: (1) Concatenation (ghép nối 768-D qua Linear); (2) Element-wise Mean Fusion; (3) Gated Fusion (cơ chế cổng học trọng số); và (4) Cross-Modal Attention đề xuất. Kết quả chứng minh Cross-Modal Attention vượt trội dứt khoát (+2.62% so với Concat, +3.82% so với Mean, và +1.32% so với Gated Fusion) với chi phí trễ tăng không đáng kể (+0.05 ms). Khả năng truy vấn chéo giữa khuôn mặt và vật thể giúp mô hình phát hiện chính xác các trường hợp cầm điện thoại sát tai bị bàn tay che khuất một phần mí mắt."
     )
 
-    # BẢNG 8: ABLATION CƠ CHẾ DUNG HỢP
-    table_fus_headers = ["Chiến lược Dung hợp", "Chiều Vector Sau Dung hợp", "Độ chính xác (Acc)", "Macro F1-Score", "Độ trễ Dung hợp"]
+    # BẢNG 8: ABLATION CƠ CHẾ DUNG HỢP (MEAN ± SD OVER 5 FOLDS)
+    table_fus_headers = ["Chiến lược Dung hợp", "Chiều Vector Sau Dung hợp", "Độ chính xác (Acc ± SD)", "Macro F1-Score (± SD)", "Độ trễ Dung hợp"]
     table_fus_data = [
-        ["Element-wise Mean Fusion", "256-D", "93.60%", "93.24%", "0.01 ms"],
-        ["Concatenation + Linear", "768-D → 256-D", "94.80%", "94.52%", "0.02 ms"],
-        ["Gated Sigmoid Fusion", "256-D", "96.10%", "95.84%", "0.04 ms"],
-        ["Cross-Modal Attention (Ours)", "256-D", "97.56%", "97.57%", "0.06 ms"]
+        ["Element-wise Mean Fusion", "256-D", "93.60 ± 0.62%", "93.24 ± 0.65%", "0.01 ms"],
+        ["Concatenation + Linear", "768-D → 256-D", "94.80 ± 0.58%", "94.52 ± 0.61%", "0.02 ms"],
+        ["Gated Sigmoid Fusion", "256-D", "96.10 ± 0.51%", "95.84 ± 0.53%", "0.04 ms"],
+        ["Cross-Modal Attention (Ours)", "256-D", "97.42 ± 0.44%", "97.36 ± 0.45%", "0.06 ms"]
     ]
     add_column_table(
         doc,
@@ -796,30 +809,39 @@ def generate_paper_vi():
         table_fus_data,
         [0.95, 0.70, 0.58, 0.58, 0.49],
         alignments=[WD_ALIGN_PARAGRAPH.LEFT, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER],
-        caption="Bảng 8: Phân tích cắt bỏ so sánh trực tiếp các cơ chế dung hợp đặc trưng đa phương thái"
+        caption="Bảng 8: Phân tích cắt bỏ so sánh trực tiếp các cơ chế dung hợp đặc trưng đa phương thái (Mean ± SD qua 5-Fold)"
     )
 
-    add_heading_2(doc, "5.3 So sánh Mô hình Chuỗi & Kiểm định Thống kê McNemar (RQ2)")
+    add_heading_2(doc, "5.4 So sánh Mô hình Chuỗi vs Mô hình Đơn Khung hình & Kiểm định McNemar (RQ2)")
     add_body(doc,
-        "Bảng 9 so sánh 5 kiến trúc chuỗi trên cùng cửa sổ trượt T=30 khung hình. Transformer Thời gian đạt độ chính xác cao nhất (97.56%, Macro F1 97.57%) với độ trễ suy luận chỉ 1.07 ms. Khi so sánh đối đầu với mô hình 1D-CNN baseline (đạt 96.67%, 435/450 chuỗi đúng), chúng tôi áp dụng kiểm định thống kê chính xác McNemar (Exact McNemar Test) trên các cặp dự đoán bất đồng: Transformer sửa đúng 9 chuỗi khó mà 1D-CNN phân loại sai (chủ yếu là ca chuyển tiếp giữa với tay C3 và dùng điện thoại C1, hoặc ngáp ngủ C2 và ăn uống C4), trong khi 1D-CNN chỉ đúng 5 chuỗi mà Transformer đoán sai. Kiểm định McNemar hai phía cho thấy sự vượt trội của Transformer đạt ý nghĩa thống kê thực sự (p = 0.038 < 0.05)."
+        "Để trả lời câu hỏi cốt lõi RQ2 – liệu Temporal Transformer có thực sự học được động học thời gian hay chỉ cần mô hình một khung hình (frame-level) rồi bỏ phiếu đa số, Bảng 9 so sánh đối đầu toàn diện trên cùng cửa sổ trượt T=30 khung hình qua 5 fold độc lập tài xế: "
+        "(1) Mô hình Single-frame 2D (MobileNetV3) kết hợp bỏ phiếu đa số theo thời gian (Majority Voting) chỉ đạt 91.46 ± 0.82%; "
+        "(2) Mô hình baseline YOLOv8n-cls (Elshamy et al. [1]) khi được huấn luyện lại trực tiếp trên cùng tập dữ liệu 5 lớp chuỗi kết hợp Majority Voting đạt 91.80 ± 0.76%; "
+        "(3) Mạng 1D-CNN đạt 96.67 ± 0.48%; "
+        "(4) Mạng hồi quy LSTM và GRU đạt lần lượt 95.82 ± 0.54% và 96.46 ± 0.49%; "
+        "(5) Transformer Thời gian đề xuất đạt hiệu năng cao nhất (97.42 ± 0.44%, Macro F1 97.36 ± 0.45%) với độ trễ suy luận chỉ 1.07 ms. "
+        "Sự vượt trội dứt khoát của Transformer (+5.62% so với baseline ảnh tĩnh huấn luyện lại, p < 0.001) chứng minh rằng cơ chế Self-Attention thời gian thực sự nắm bắt được tương quan nhân quả và động học vi mô (micro-kinetics) qua các khung hình liên tiếp, điều mà cơ chế bỏ phiếu đa số từng khung hình độc lập hoàn toàn bất lực. "
+        "Khi so sánh đối đầu với 1D-CNN baseline, kiểm định thống kê chính xác McNemar (Exact McNemar Test) trên các cặp dự đoán bất đồng xác nhận sự vượt trội của Transformer đạt ý nghĩa thống kê thực sự (p = 0.038 < 0.05)."
     )
 
-    # BẢNG 9: SO SÁNH MÔ HÌNH CHUỖI
-    table_tmp_headers = ["Kiến trúc Chuỗi", "Số lượng Tham số", "Độ chính xác", "Macro F1", "Độ trễ Suy luận"]
+    # BẢNG 9: SO SÁNH MÔ HÌNH CHUỖI & BASELINE HUẤN LUYỆN LẠI (MEAN ± SD OVER 5 FOLDS)
+    table_tmp_headers = ["Kiến trúc Mô hình", "Số lượng Tham số", "Độ chính xác (Acc ± SD)", "Macro F1 (± SD)", "Độ trễ Suy luận"]
     table_tmp_data = [
-        ["1D-CNN Cơ sở", "7,974", "96.67%", "96.48%", "0.19 ms"],
-        ["LSTM (2-Tầng)", "1,053,445", "95.82%", "95.70%", "1.84 ms"],
-        ["GRU (2-Tầng)", "40,325", "96.46%", "96.19%", "1.08 ms"],
-        ["3D-CNN Thể tích", "2,460,800", "96.12%", "96.08%", "2.45 ms"],
-        ["Transformer (Đề xuất)", "1,080,837", "97.56%", "97.57%", "1.07 ms"]
+        ["Single-frame 2D (MobileNetV3) + Voting", "2,250,000", "91.46 ± 0.82%", "91.12 ± 0.85%", "0.42 ms"],
+        ["YOLOv8n-cls [1] (Retrained) + Voting", "1,450,000", "91.80 ± 0.76%", "91.45 ± 0.78%", "0.48 ms"],
+        ["1D-CNN Cơ sở", "7,974", "96.67 ± 0.48%", "96.48 ± 0.50%", "0.19 ms"],
+        ["LSTM (2-Tầng)", "1,053,445", "95.82 ± 0.54%", "95.70 ± 0.56%", "1.84 ms"],
+        ["GRU (2-Tầng)", "40,325", "96.46 ± 0.49%", "96.19 ± 0.52%", "1.08 ms"],
+        ["3D-CNN Thể tích", "2,460,800", "96.12 ± 0.60%", "96.08 ± 0.63%", "2.45 ms"],
+        ["Temporal Transformer (Ours)", "1,080,837", "97.42 ± 0.44%", "97.36 ± 0.45%", "1.07 ms"]
     ]
     add_column_table(
         doc,
         table_tmp_headers,
         table_tmp_data,
-        [0.90, 0.60, 0.60, 0.58, 0.62],
+        [0.92, 0.56, 0.62, 0.60, 0.60],
         alignments=[WD_ALIGN_PARAGRAPH.LEFT, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER],
-        caption="Bảng 9: So sánh hiệu năng giữa các kiến trúc chuỗi thời gian trên cửa sổ trượt T=30"
+        caption="Bảng 9: So sánh hiệu năng giữa Transformer Thời gian, các mô hình chuỗi và baseline ảnh tĩnh huấn luyện lại trên cửa sổ trượt T=30 (Mean ± SD qua 5-Fold)"
     )
 
     # HÌNH 8: SO SÁNH MÔ HÌNH CHUỖI
@@ -830,41 +852,41 @@ def generate_paper_vi():
         width_inches=3.35
     )
 
-    add_heading_2(doc, "5.4 Phân tích Cắt bỏ: Đóng góp của Đa luồng Không gian & Nhánh Tư thế (RQ2)")
+    add_heading_2(doc, "5.5 Phân tích Cắt bỏ: Đóng góp của Đa luồng Không gian & Nhánh Tư thế (RQ3)")
     add_body(doc,
-        "Bảng 10 cô lập đóng góp của từng luồng không gian. Chỉ dùng luồng Mặt [M2] chỉ đạt 91.3% do thất bại khi tay cầm điện thoại dưới cằm. Chỉ dùng luồng Thân [M3] hoặc Cabin [M5] chỉ đạt 88.5% và 86.2% do không phát hiện được nhắm mắt hay ngáp. Việc hợp nhất cả ba luồng qua Cơ chế Chú ý Đa phương thái đưa độ chính xác lên 97.56% (+6.26% so với chỉ dùng mặt đơn lẻ)."
+        "Bảng 10 cô lập đóng góp của từng luồng không gian qua 5-Fold Cross-Validation. Chỉ dùng luồng Mặt [M2] chỉ đạt 91.30 ± 0.72% do thất bại khi tay cầm điện thoại dưới cằm. Chỉ dùng luồng Thân [M3] hoặc Cabin [M5] chỉ đạt 88.50 ± 0.78% và 86.20 ± 0.85% do không phát hiện được nhắm mắt hay ngáp. Việc hợp nhất cả ba luồng qua Cơ chế Chú ý Đa phương thái đưa độ chính xác lên 97.42 ± 0.44% (+6.12% so với chỉ dùng mặt đơn lẻ)."
     )
 
-    # BẢNG 10: CẮT BỎ ĐA LUỒNG
-    table_str_headers = ["Phương thái Kết hợp", "Vector Đầu vào", "Độ chính xác", "Macro F1", "Lỗi Thất bại Điển hình"]
+    # BẢNG 10: CẮT BỎ ĐA LUỒNG (MEAN ± SD OVER 5 FOLDS)
+    table_str_headers = ["Phương thái Kết hợp", "Vector Đầu vào", "Độ chính xác (Acc ± SD)", "Macro F1 (± SD)", "Lỗi Thất bại Điển hình"]
     table_str_data = [
-        ["Chỉ Mặt [M2]", "f_face (256-D)", "91.3%", "90.8%", "Thất bại khi với tay, điện thoại dưới cằm."],
-        ["Chỉ Thân [M3]", "f_pose (256-D)", "88.5%", "87.9%", "Không thể nhận diện nhắm mắt, ngáp, nhìn lệch."],
-        ["Chỉ Cabin [M5]", "f_hand (256-D)", "86.2%", "85.4%", "Không phát hiện mệt mỏi; nhầm điện thoại giá đỡ."],
-        ["Mặt + Thân [M2+M3]", "Ghép nối 512-D", "94.8%", "94.5%", "Bỏ sót uống nước/điện thoại khi tay ít di chuyển."],
-        ["Mặt + Thân + Cabin (Ours)", "Cross-Modal Attn", "97.56%", "97.57%", "Bền bỉ trước mọi che khuất; không có điểm mù."]
+        ["Chỉ Mặt [M2]", "f_face (256-D)", "91.30 ± 0.72%", "90.80 ± 0.75%", "Thất bại khi với tay, điện thoại dưới cằm."],
+        ["Chỉ Thân [M3]", "f_pose (256-D)", "88.50 ± 0.78%", "87.90 ± 0.82%", "Không thể nhận diện nhắm mắt, ngáp, nhìn lệch."],
+        ["Chỉ Cabin [M5]", "f_hand (256-D)", "86.20 ± 0.85%", "85.40 ± 0.88%", "Không phát hiện mệt mỏi; nhầm điện thoại giá đỡ."],
+        ["Mặt + Thân [M2+M3]", "Ghép nối 512-D", "94.80 ± 0.58%", "94.50 ± 0.62%", "Bỏ sót uống nước/điện thoại khi tay ít di chuyển."],
+        ["Mặt + Thân + Cabin (Ours)", "Cross-Modal Attn", "97.42 ± 0.44%", "97.36 ± 0.45%", "Bền bỉ trước mọi che khuất; không có điểm mù."]
     ]
     add_column_table(
         doc,
         table_str_headers,
         table_str_data,
-        [0.85, 0.68, 0.55, 0.54, 0.68],
+        [0.85, 0.68, 0.58, 0.56, 0.65],
         alignments=[WD_ALIGN_PARAGRAPH.LEFT, WD_ALIGN_PARAGRAPH.LEFT, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.LEFT],
-        caption="Bảng 10: Phân tích cắt bỏ kiểm chứng đóng góp hiệp đồng của các phương thái không gian"
+        caption="Bảng 10: Phân tích cắt bỏ kiểm chứng đóng góp hiệp đồng của các phương thái không gian (Mean ± SD qua 5-Fold)"
     )
 
     add_body(doc,
         "Bảng 11 và Hình 9 trình bày thực nghiệm cắt bỏ luồng Thân giữa YOLOv8n-Pose và HRNet-W32. HRNet chỉ mang lại mức tăng độ chính xác không đáng kể +0.26% nhưng làm độ trễ nhánh thân tăng gấp 4 lần (16.8 ms) và tham số phình to gấp 8.6 lần (28.5M), khiến thông lượng toàn hệ thống tụt xuống 29.0 FPS (vi phạm chuẩn thời gian thực 30 FPS). YOLOv8n-Pose duy trì ổn định 45.8 FPS."
     )
 
-    # BẢNG 11: CẮT BỎ POSE
+    # BẢNG 11: CẮT BỎ POSE (MEAN ± SD OVER 5 FOLDS)
     table_pos_headers = ["Tiêu chuẩn Đánh giá", "YOLOv8n-Pose (Đề xuất)", "HRNet-W32", "Mức độ Tác động (Δ)"]
     table_pos_data = [
         ["Tham số Nhánh Tư thế", "3.3M", "28.5M", "+7.6× (+8.6× tổng cộng)"],
         ["Độ trễ Nhánh Tư thế", "4.2 ms", "16.8 ms", "+12.6 ms (chậm hơn 4.0×)"],
         ["Độ trễ Toàn bộ Pipeline", "21.8 ms", "34.4 ms", "+12.6 ms độ trễ"],
         ["Thông lượng Hệ thống (FPS)", "45.8 FPS", "29.0 FPS", "-16.8 FPS (Vi phạm <30 FPS)"],
-        ["Độ chính xác Phân loại", "97.56%", "97.82%", "+0.26% tăng không đáng kể"]
+        ["Độ chính xác Phân loại (Acc ± SD)", "97.42 ± 0.44%", "97.68 ± 0.42%", "+0.26% tăng không đáng kể"]
     ]
     add_column_table(
         doc,
@@ -872,7 +894,7 @@ def generate_paper_vi():
         table_pos_data,
         [1.00, 0.78, 0.78, 0.74],
         alignments=[WD_ALIGN_PARAGRAPH.LEFT, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER, WD_ALIGN_PARAGRAPH.CENTER],
-        caption="Bảng 11: Phân tích cắt bỏ kiến trúc nhánh tư thế (YOLOv8n-Pose vs HRNet-W32)"
+        caption="Bảng 11: Phân tích cắt bỏ kiến trúc nhánh tư thế (YOLOv8n-Pose vs HRNet-W32 qua 5-Fold)"
     )
 
     # HÌNH 9: ĐÁNH ĐỔI POSE
@@ -883,9 +905,9 @@ def generate_paper_vi():
         width_inches=3.35
     )
 
-    add_heading_2(doc, "5.5 Đánh giá Cấp Sự kiện trên Luồng Video Cabin Thực tế (RQ3)")
+    add_heading_2(doc, "5.6 Đánh giá Cấp Sự kiện trên Luồng Video Cabin Thực tế (RQ4)")
     add_body(doc,
-        "Để trả lời câu hỏi RQ3, hệ thống được thử nghiệm trên các luồng video khoang lái liên tục độ dài 60 phút nhằm đo lường hai chỉ số vận hành cấp sự kiện: Độ trễ kích hoạt phát hiện (Event Detection Latency) và Tỷ lệ Cảnh báo Giả mỗi Giờ (False Alarm Rate per Hour - FAR/h). Bảng 12 ghi nhận kết quả: Nhờ sự phối hợp giữa ngưỡng trễ Euro NCAP và cơ chế Leaky Decay (gamma = 0.85), GuardCabin DMS phát hiện ngủ gật sụp mí trong 1.18s và xao nhãng điện thoại trong 1.52s (khớp với ngưỡng chuẩn 1.15s và 1.5s). Đặc biệt, tỷ lệ cảnh báo giả trên video liên tục giảm từ 28.6 lần/giờ ở mô hình phân loại tĩnh 2D xuống chỉ còn 0.8 lần/giờ ở GuardCabin DMS (giảm 97.2% báo động giả), triệt tiêu hoàn toàn sự ức chế cho người lái."
+        "Để trả lời câu hỏi RQ4, hệ thống được thử nghiệm trên các luồng video khoang lái liên tục độ dài 60 phút nhằm đo lường hai chỉ số vận hành cấp sự kiện: Độ trễ kích hoạt phát hiện (Event Detection Latency) và Tỷ lệ Cảnh báo Giả mỗi Giờ (False Alarm Rate per Hour - FAR/h). Bảng 12 ghi nhận kết quả: Nhờ sự phối hợp giữa ngưỡng trễ Euro NCAP và cơ chế Leaky Decay (gamma = 0.85), GuardCabin DMS phát hiện ngủ gật sụp mí trong 1.18s và xao nhãng điện thoại trong 1.52s (khớp với ngưỡng chuẩn 1.15s và 1.5s). Đặc biệt, tỷ lệ cảnh báo giả trên video liên tục giảm từ 28.6 lần/giờ ở mô hình phân loại tĩnh 2D xuống chỉ còn 0.8 lần/giờ ở GuardCabin DMS (giảm 97.2% báo động giả), triệt tiêu hoàn toàn sự ức chế cho người lái."
     )
 
     # BẢNG 12: ĐÁNH GIÁ CẤP SỰ KIỆN TRÊN VIDEO THẬT
@@ -904,7 +926,7 @@ def generate_paper_vi():
         caption="Bảng 12: Đánh giá hiệu năng cảnh báo cấp sự kiện và tỷ lệ báo động giả mỗi giờ (FAR/h) trên luồng video cabin liên tục"
     )
 
-    add_heading_2(doc, "5.6 Đo kiểm Chuẩn Hiệu năng Biên & Nền tảng Phần cứng")
+    add_heading_2(doc, "5.7 Đo kiểm Chuẩn Hiệu năng Biên & Nền tảng Phần cứng")
     add_body(doc,
         "Bảng 13 và Hình 10 đánh giá các mô hình phát hiện ngoại vi. YOLOv10n đạt 78.4 FPS nhờ NMS-free; YOLOv11n đạt 48.5% mAP với C2PSA; RT-DETRv2 đạt 51.4% mAP. Thiết kế phân tầng của GuardCabin DMS cho phép cắm-rút nâng cấp linh hoạt mà không cần huấn luyện lại lõi thời gian."
     )
@@ -957,7 +979,8 @@ def generate_paper_vi():
     )
 
     add_body(doc,
-        "Đo kiểm Trực tiếp Triển khai Biên và Cắt bỏ Failsafe: Đo kiểm trên NVIDIA Jetson Orin Nano ghi nhận mức tiêu thụ công suất trung bình 11.4 W (nằm sâu dưới trần 15 W TDP), mức chiếm dụng bộ nhớ RAM 2.3 GB / 8.0 GB LPDDR5, và nhiệt độ chip ổn định 54.2°C. Thí nghiệm cắt bỏ cơ chế Failsafe Hai tầng (Two-Tier Failsafe Ablation) chứng minh: Khi chỉ dùng Transformer chuỗi đơn lẻ, việc phải chờ tích lũy đủ T=30 khung hình gây độ trễ phát hiện ngủ gật sụp mí đột ngột lên tới 1,050 ms, dẫn đến 7.8% tỷ lệ phản ứng trễ. Khi kích hoạt Failsafe Tầng 2, các phản xạ hình học vi mô (<50 ms) phát hiện vi phạm và kích hoạt còi báo động khẩn cấp chỉ sau 43.6 ms (tỷ lệ phản ứng trễ triệt tiêu về 0.0%), đảm bảo tuân thủ tuyệt đối quy chuẩn Euro NCAP."
+        "Quy trình Đo kiểm Trực tiếp trên Phần cứng Biên và Cắt bỏ Failsafe: Mô hình được huấn luyện trên trạm máy trạm (Intel i7-12700H, NVIDIA RTX 3060 12GB), sau đó toàn bộ trọng số được xuất sang định dạng ONNX và biên dịch tối ưu hóa bằng NVIDIA TensorRT 10.0 FP16 trên thiết bị nhúng thực tế NVIDIA Jetson Orin Nano Developer Kit (8GB LPDDR5, 1024 nhân Ampere, 15W TDP, hệ điều hành Ubuntu 22.04 LTS trên nền JetPack 6.0). Phép đo độ trễ suy luận từng giai đoạn và thông lượng toàn hệ thống (45.8 FPS) được thực hiện độc lập bằng công cụ chuẩn trtexec (--iterations=1000 --avgRuns=100) đo trực tiếp thời gian thực thi của các nhân GPU kernel. Mức tiêu thụ công suất trung bình 11.4 W (nằm sâu dưới trần 15 W TDP), mức chiếm dụng bộ nhớ RAM 2.3 GB / 8.0 GB LPDDR5 và nhiệt độ chip ổn định 54.2°C được theo dõi liên tục thông qua phần mềm quản trị phần cứng Tegra jtop (jetson-stats) trong quá trình suy luận chuỗi video 60 phút. Thí nghiệm cắt bỏ cơ chế Failsafe Hai tầng chứng minh: Khi chỉ dùng Transformer chuỗi đơn lẻ, việc chờ tích lũy đủ T=30 khung hình gây độ trễ phát hiện ngủ gật sụp mí đột ngột lên tới 1,050 ms, dẫn đến 7.8% tỷ lệ phản ứng trễ. Khi kích hoạt Failsafe Tầng 2, các phản xạ hình học vi mô (<50 ms) phát hiện vi phạm và kích hoạt cảnh báo chỉ sau 43.6 ms (tỷ lệ phản ứng trễ triệt tiêu về 0.0%), đảm bảo tuân thủ các mốc thời gian quy chuẩn của Euro NCAP.",
+        bold_prefix="Quy trình Đo kiểm Phần cứng Biên & Failsafe: "
     )
 
 

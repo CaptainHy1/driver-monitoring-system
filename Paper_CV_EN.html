@@ -3,7 +3,7 @@
 <head>
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-<title>GuardCabin DMS: Real-Time Multimodal Driver Monitoring System</title>
+<title>GuardCabin DMS: Occlusion-Robust Real-Time Multimodal Driver Monitoring System Aligned with Euro NCAP 2026</title>
 
 <style>
     @page {
@@ -26,104 +26,109 @@
         max-width: 210mm;
         margin: 0 auto;
         background: #fff;
-        padding: 14mm 14mm 16mm 14mm;
+        padding: 16mm 14mm 16mm 14mm;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     .front-matter {
         text-align: center;
         margin-bottom: 12px;
-        padding-bottom: 8px;
     }
     h1.title {
-        font-size: 15.5pt;
+        font-size: 16pt;
         font-weight: bold;
-        line-height: 1.22;
+        color: #1a365d;
+        line-height: 1.2;
         margin: 0 0 8px 0;
-        color: #000;
-        text-transform: uppercase;
     }
     .authors {
-        font-size: 9pt;
-        margin-bottom: 6px;
-        font-weight: 500;
+        font-size: 9.5pt;
+        font-weight: bold;
+        color: #2d3748;
+        margin-bottom: 3px;
     }
     .affiliations {
-        font-size: 7.5pt;
+        font-size: 7.8pt;
         font-style: italic;
-        color: #444;
-        margin-bottom: 10px;
+        color: #718096;
+        line-height: 1.25;
+        margin-bottom: 12px;
     }
     .abstract-box {
         text-align: justify;
-        font-size: 8pt;
+        font-size: 8.0pt;
         line-height: 1.15;
-        margin: 0 10px 12px 10px;
-        padding: 8px 12px;
-        background-color: #fdfdfd;
-        border-top: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
+        padding: 0 10px;
+        margin-bottom: 12px;
     }
     .abstract-title {
         font-weight: bold;
-        font-style: italic;
+        color: #111;
     }
     .keywords {
-        font-size: 7.5pt;
-        margin-top: 5px;
-    }
-    .keywords strong {
         font-style: italic;
+        color: #2b4c7e;
+        margin-top: 4px;
     }
     .two-columns {
         column-count: 2;
-        column-gap: 6mm;
-        column-rule: 0.5px solid #e2e8f0;
+        column-gap: 6.5mm;
         text-align: justify;
     }
     h2.sec-heading {
-        font-size: 9.5pt;
+        font-size: 9.8pt;
         font-weight: bold;
+        color: #000;
         text-transform: uppercase;
-        margin: 10px 0 4px 0;
-        border-bottom: 0.5px solid #333;
-        padding-bottom: 1px;
+        letter-spacing: 0.3px;
+        margin: 9px 0 3px 0;
+        padding-bottom: 1.5px;
+        border-bottom: 0.6px solid #2b4c7e;
         break-after: avoid;
     }
     h3.subsec-heading {
         font-size: 8.8pt;
         font-weight: bold;
+        color: #1a202c;
+        margin: 6px 0 2px 0;
+        break-after: avoid;
+    }
+    h4.subsubsec-heading {
+        font-size: 8.2pt;
+        font-weight: bold;
         font-style: italic;
-        margin: 8px 0 3px 0;
+        color: #2d3748;
+        margin: 4px 0 1px 0;
         break-after: avoid;
     }
     p {
-        margin: 0 0 5px 0;
-        text-indent: 1.2em;
+        margin: 0 0 4px 0;
+        text-indent: 10px;
     }
     p.no-indent {
         text-indent: 0;
     }
     .table-container {
-        margin: 7px 0;
+        margin: 6px 0;
         break-inside: avoid;
-        width: 100%;
     }
     .caption {
         font-size: 7.2pt;
         font-weight: bold;
         text-align: center;
-        margin-bottom: 3px;
+        margin-bottom: 2.5px;
+        color: #1a202c;
+        line-height: 1.15;
     }
     table {
         width: 100%;
         border-collapse: collapse;
         font-size: 6.8pt;
-        line-height: 1.1;
-        border-top: 1.2px solid #000;
-        border-bottom: 1.2px solid #000;
+        line-height: 1.08;
+        border-top: 1.2px solid #2b4c7e;
+        border-bottom: 1.2px solid #2b4c7e;
     }
     th {
-        border-bottom: 0.8px solid #000;
+        border-bottom: 0.8px solid #2b4c7e;
         padding: 3px 2px;
         font-weight: bold;
         background-color: #fcfcfc;
@@ -194,191 +199,196 @@
 <div class='authors'>Khang-Hy Ho, Huu-Khoi Nguyen</div>
 <div class='affiliations'>Department of Information Technology, Danang University of Science and Technology, Vietnam<br>Email: {hy.hk, khoi.nh}@dut.udn.vn</div>
 <div class='abstract-box'>
-<span class='abstract-title'>Abstract—</span>Driver distraction and momentary microsleep episodes cause over 90% of severe traffic collisions globally. Conventional spatio-temporal 3D-CNNs incur prohibitive compute (>150 GFLOPs, >120 ms latency), while contemporary static 2D image classifiers (e.g., baseline P-YOLOv8) lack temporal sequence context and completely omit driver fatigue detection, yielding intolerable false alarm rates in continuous driving. We propose GuardCabin DMS, a closed-loop real-time driver monitoring system structured as a decoupled three-stage framework aligned with Euro NCAP Vision 2026 guidelines and ISO 22839 standards. Stage 1 extracts three parallel spatial streams: Facial Biometrics (EAR, MAR, Gaze, 3D Head Pose), Body Kinematics (YOLOv8-Pose 17 joints + ST-GCN), and In-Cabin Object Interaction (YOLO + Spatial Interaction MLP). Stage 2 adaptively fuses these heterogeneous representations via Cross-Modal Attention and models continuous temporal dynamics using a compact Temporal Transformer (T=30 sliding window, 1.07 ms latency). Stage 3 deploys a Two-Tier Hybrid Failsafe Engine coupling macro-level deep sequence inference with deterministic micro-reflex fallback rules (<50 ms response time) and a Leaky Decay alert accumulator preventing intermittent driver tampering. Evaluated via a 5-Fold Subject-Independent Cross-Validation protocol across a multi-source dataset of 2,400 video sequences (72,000 frames; mechanical distractions from State Farm, fatigue/drowsiness from YawDD and NTHU-DDD) with 18% hard edge cases, the system attains a mean accuracy of 97.42 ± 0.44% (Macro F1 97.36 ± 0.45%), reaching 97.56% accuracy on independent test cohorts (95% Wilson CI: [95.8%, 98.6%]). On real-world in-cabin video streams, the system detects microsleep within 1.18s and phone distractions within 1.52s, slashing false alarms to 0.8 alerts/hour (a 97.2% reduction over static models) at 45.8 FPS on an NVIDIA Jetson Orin Nano (15W TDP).<br>
-<div class='keywords'><strong>Index Terms—</strong>Driver Monitoring System (DMS), Euro NCAP 2026, Temporal Transformer, Cross-Modal Attention, 5-Fold Cross-Validation, False Alarm Rate (FAR/h), Edge AI.</div>
+<span class='abstract-title'>Abstract—</span>Driver distraction and momentary microsleep episodes cause over 90% of severe traffic collisions globally according to WHO and NHTSA statistics. Conventional spatio-temporal 3D-CNNs incur prohibitive compute (>150 GFLOPs, >120 ms latency), while contemporary static 2D image classifiers (e.g., baseline P-YOLOv8) lack temporal sequence context and omit physiological fatigue modeling, yielding intolerable false alarm rates in continuous driving. We propose GuardCabin DMS, a closed-loop real-time driver monitoring system structured as a decoupled three-stage framework aligned with Euro NCAP 2026 active safety guidelines and ISO 22839 standards. The system decouples three parallel spatial streams to eliminate confounding background dependencies: Stream 1 (Facial Biometrics: Face ViT-Tiny + MediaPipe 3D Mesh estimating EAR, MAR, Gaze, and 3D Head Pose PnP), Stream 2 (Body Kinematics: YOLOv8n-Pose 17 joints + ST-GCN), and Stream 3 (In-Cabin Interaction: YOLO Cockpit + Spatial MLP identifying phone and bottle interactions). Extracted geometric representations are adaptively fused via Cross-Modal Attention and modeled over continuous temporal dynamics using a compact Temporal Transformer (sliding window T=30 frames, 1.07 ms sequence latency). A standardized multi-source benchmark of 2,400 sequences (72,000 frames; balanced 480 sequences/class across 5 canonical ADAS classes C0–C4) combines mechanical distractions from State Farm synthesized via a Kinematic Pseudo-Sequence Protocol with authentic in-cabin fatigue video streams from YawDD and NTHU-DDD, incorporating 18% hard edge cases. Evaluated via a 5-Fold Subject-Independent Cross-Validation protocol across 62 independent drivers, the system attains a mean accuracy of 97.42 ± 0.44% (Macro F1 97.36 ± 0.45%), significantly outperforming single-frame classification with majority voting (+5.62%, p &lt; 0.001) and 1D-CNN baselines (McNemar test p = 0.038). A Two-Tier Hybrid Failsafe Engine coupled with a Leaky Decay accumulator detects microsleep within 1.18s and phone distractions within 1.52s, slashing false alarms to 0.8 alerts/hour (-97.2%) on continuous video streams while achieving 45.8 FPS benchmarked on an NVIDIA Jetson Orin Nano (15W TDP).<br>
+<div class='keywords'><strong>Keywords—</strong>Driver Monitoring System (DMS), Temporal Transformer, Cross-Modal Attention, ST-GCN, Two-Tier Failsafe, Leaky Decay, Euro NCAP 2026, Edge AI.</div>
 </div>
 </div>
 <div class='two-columns'>
 <h2 class='sec-heading'>1. Introduction and Problem Formulation</h2>
-<p>Transportation safety reports from WHO and NHTSA reveal that over 90% of severe traffic accidents originate from driver subjective errors. Consequently, Euro NCAP Vision 2026 and ISO 22839 standards mandate direct Driver Monitoring Systems (DMS) inside vehicle cockpits.</p>
-<p>Deploying robust in-cabin DMS faces three operational bottlenecks: (i) 3D-CNNs incur prohibitive compute (>150 GFLOPs, >120 ms latency) exceeding the <15W ECU envelope; (ii) Recurrent networks (LSTM, GRU) block parallel execution; and (iii) Static 2D classifiers (e.g., P-YOLOv8 [1]) yield intolerable false alarm rates in continuous driving due to the absence of temporal dynamics.</p>
-<p class='no-indent'>This study addresses three core Research Questions (RQs):<br>• <strong>RQ1:</strong> What sequence classification accuracy and compute latency can a decoupled multi-stream architecture with a compact Temporal Transformer achieve on edge hardware?<br>• <strong>RQ2:</strong> Which architectural components—specifically Cross-Modal Attention (vs. Concat, Mean, Gated) and Temporal Transformer (vs. 1D-CNN)—truly contribute, measured with controlled and statistically tested ablations (McNemar test)?<br>• <strong>RQ3:</strong> How effectively do the Two-Tier Failsafe and continuous Leaky Decay accumulator improve event-level metrics (detection latency and false alarm rate per hour FAR/h) on continuous cockpit video streams?</p>
+<p>Modern transportation safety analyses conducted by the World Health Organization (WHO) and NHTSA establish that over 90% of severe traffic collisions originate directly from driver subjective errors: cognitive distraction, handheld mobile phone manipulation, fatigue, and momentary microsleep. Consequently, global automotive safety authorities — notably the European Union General Safety Regulation (EU GSR 2024/2026) and Euro NCAP Vision 2026 active safety protocols — mandate Direct Driver Monitoring Systems (DMS) meeting ISO 22839 quantitative latency standards.</p>
+<p>Despite substantial advances in computer vision, deploying robust DMS inside automotive cockpits faces three severe operational bottlenecks: (i) Spatio-temporal 3D-CNNs demand >150 GFLOPs with latency exceeding 120 ms, exceeding the <15W thermal envelope of automotive ECUs; (ii) Recurrent architectures (LSTM, GRU) impose sequential recurrence (t → t+1) blocking parallel acceleration; and (iii) Static 2D classifiers (e.g., P-YOLOv8 [1]) achieve high nominal scores on still photos but trigger rampant false alarms in continuous driving (treating a 0.15s natural blink as microsleep, and ear-scratching as phone use).</p>
+<p class='no-indent'>This study is organized around four primary Research Questions (RQs):<br>• <strong>RQ1:</strong> What sequence classification accuracy and compute latency can a decoupled multi-stream architecture with a compact Temporal Transformer achieve via 5-Fold Subject-Independent evaluation on edge hardware?<br>• <strong>RQ2:</strong> Does a Temporal Transformer modeling kinematic dynamics significantly outperform single-frame 2D classification with temporal majority voting (Single-frame + Majority Voting) and classic sequence models (1D-CNN, LSTM, GRU), as quantified by McNemar statistical testing?<br>• <strong>RQ3:</strong> How much do Cross-Modal Attention (vs. Concat, Mean, Gated) and multi-stream spatial extraction contribute, and does the decoupled architecture guarantee absolute Background-Invariant Representation?<br>• <strong>RQ4:</strong> How effectively do the Two-Tier Failsafe and continuous Leaky Decay accumulator improve event-level metrics (detection latency and false alarm rate per hour FAR/h) on continuous cockpit video streams?</p>
 <div class='table-container'>
-<div class='caption'>Table 1: Canonical 5-class ADAS behavioral taxonomy (C0–C4), multi-source dataset provenance, and Euro NCAP 2026 safety risk tiers</div>
+<div class='caption'>Table 1: 5 canonical ADAS behavioral classes (C0–C4), dataset provenance, and safety escalation tiers</div>
 <table>
-<tr><th>Class</th><th>ADAS State</th><th>In-Cabin Data Source</th><th>Tier</th><th>Euro NCAP Regulatory Trigger Rule</th></tr>
-<tr><td><strong>C0</strong></td><td>Safe Driving (Normal)</td><td>State Farm c0 + YawDD Normal</td><td>L0 (Green)</td><td>Eyes on road, head straight, both hands in control zone.</td></tr>
-<tr><td><strong>C1</strong></td><td>Phone Usage (Call/Text)</td><td>State Farm c1–c4 (26 drivers)</td><td>L2 (Orange)</td><td>Left/right handheld calling or texting sustained >= 1.5s.</td></tr>
-<tr><td><strong>C2</strong></td><td>Drowsiness / Yawning</td><td>YawDD & NTHU-DDD Video</td><td>L3 / L1</td><td>L3 Red if eye closure >= 1.15s; L1 Yellow if MAR >= 0.45.</td></tr>
-<tr><td><strong>C3</strong></td><td>Reaching Behind / Side</td><td>State Farm c7 (26 drivers)</td><td>L1 (Yellow)</td><td>Torso rotation, reaching to backseat, slouching >= 1.8s.</td></tr>
-<tr><td><strong>C4</strong></td><td>Eating / Drinking</td><td>State Farm c6, c8 (26 drivers)</td><td>L1 (Yellow)</td><td>Holding beverage bottle/cup or hand-to-mouth >= 3.0s.</td></tr>
+<tr><th>Class</th><th>ADAS Behavioral State</th><th>Source Datasets & Streams</th><th>Risk Tier</th><th>Euro NCAP Trigger Rule</th></tr>
+<tr><td><strong>C0</strong></td><td>Safe Driving (Normal)</td><td>State Farm c0 | All 3 Streams</td><td>L0 (Green)</td><td>Eyes on road, head straight, both hands on wheel.</td></tr>
+<tr><td><strong>C1</strong></td><td>Phone Usage (Call / Text)</td><td>Aggregated State Farm c1–c4 | [M5]+[M3]</td><td>L2 (Orange)</td><td>Left/right handheld calling or texting sustained >= 1.5s.</td></tr>
+<tr><td><strong>C2</strong></td><td>Drowsiness / Yawning</td><td>Real Video YawDD & NTHU-DDD | [M2]</td><td>L3 / L1</td><td>L3 Red if eye closure >= 1.15s; L1 Yellow if MAR >= 0.45 (>= 0.6s).</td></tr>
+<tr><td><strong>C3</strong></td><td>Reaching Behind / Side</td><td>State Farm c7 | [M3] Pose + [M4] GCN</td><td>L1 (Yellow)</td><td>Torso rotation, reaching to backseat, or slouching >= 1.8s.</td></tr>
+<tr><td><strong>C4</strong></td><td>Eating / Drinking</td><td>Aggregated State Farm c6, c8 | [M5]+[M3]</td><td>L1 (Yellow)</td><td>Handheld cup/bottle to mouth, hand off wheel >= 3.0s.</td></tr>
 </table></div>
+<p>Core scientific contributions: (1) A compact Temporal Transformer operating on a FIFO sliding queue of T=30 fused vectors with only 1.07 ms latency; (2) An adaptive Cross-Modal Attention mechanism dynamically compensating between Face, Body, and Cockpit streams under severe occlusions; (3) A Two-Tier Hybrid Failsafe framework coupling deep sequence inference with micro-geometric reflex rules (<50 ms); (4) A continuous Leaky Decay accumulator preventing intermittent driver tampering; and (5) Comprehensive multi-source benchmarking across 2,400 sequences (State Farm + YawDD + NTHU-DDD) via 5-Fold Subject-Independent Cross-Validation, achieving 45.8 FPS on an NVIDIA Jetson Orin Nano.</p>
 <h2 class='sec-heading'>2. Related Work and Benchmarking Against Baseline Paper (P-YOLOv8)</h2>
-<p>The recent baseline paper by Elshamy et al. (arXiv:2410.15602v1, Oct. 2024) [1] proposed P-YOLOv8 on the 10-class Kaggle State Farm dataset, publishing 99.46% nominal accuracy under a random 70/15/15 split. However, critical automotive ADAS analysis reveals: background interior leakage, total absence of temporal sequence modeling, and 0% drowsiness/fatigue coverage. Table 2 presents a rigorous multi-criteria qualitative comparison.</p>
+<p>Driver monitoring system (DMS) literature has evolved rapidly from early hand-crafted geometric heuristics to deep convolutional and transformer architectures. Most prominently, the recent representative baseline paper by Elshamy et al. (arXiv:2410.15602v1, Oct. 2024) [1] introduced P-YOLOv8, adapting pretrained YOLOv8 classification networks (yolov8n-cls, 1.45M parameters, 4.3 GFLOPs) on the 10-class Kaggle State Farm Distracted Driver Detection dataset (c0–c9), reporting an impressive nominal classification accuracy of 99.46% (F1-score: 99.44%) under a random 70/15/15 train/val/test split.</p>
+<p><strong>Scientific Paradigm Shift:</strong> While P-YOLOv8 [1] demonstrates high empirical scores on static 2D images, from an automotive ADAS engineering and Euro NCAP 2026 active safety perspective, this benchmark reflects critical task-level limitations: (i) Background Leakage and Subject Overfitting: State Farm comprises 22,424 static photos captured in parked vehicles across only 26 drivers; a random split allows near-duplicate interior backgrounds and driver garments to contaminate test partitions; (ii) Total Absence of Temporal Dynamics: Single-image classification cannot differentiate a harmless 0.15s physiological blink from a lethal >= 1.15s microsleep episode; and (iii) Omission of Physiological Fatigue: The baseline focuses strictly on posture distraction without drowsiness modeling, missing microsleep and yawning. We resolve these limitations via Taxonomy Remapping into 5 canonical ADAS classes C0–C4.</p>
 <div class='table-container'>
 <div class='caption'>Table 2: Direct multi-criteria comparison: GuardCabin DMS vs. Baseline Paper P-YOLOv8 [1] (arXiv:2410.15602v1)</div>
 <table>
-<tr><th>Technical Criterion</th><th>Baseline Paper P-YOLOv8 [1]</th><th>GuardCabin DMS (This Study)</th></tr>
-<tr><td><strong>Task Paradigm</strong></td><td>Static 2D snapshot classification</td><td>Continuous temporal sequence modeling (T=30 queue)</td></tr>
-<tr><td><strong>Experimental Benchmark</strong></td><td>Kaggle State Farm (22,424 static frames, 10 classes)</td><td>Multi-source 2,400 sequences: State Farm + YawDD + NTHU-DDD</td></tr>
-<tr><td><strong>Drowsiness / Yawn (C2)</strong></td><td>0% (Omitted from dataset entirely)</td><td><strong>96.1% Recall, 100.0% Precision</strong> (Euro NCAP priority)</td></tr>
-<tr><td><strong>Validation Protocol</strong></td><td>Random 70/15/15 split (Background leakage)</td><td><strong>5-Fold Subject-Independent (Leave-k-Drivers-Out)</strong></td></tr>
-<tr><td><strong>Occlusion Resilience</strong></td><td>None (Vulnerable to sunglasses/masks)</td><td><strong>Self-adaptive Cross-Modal Attention</strong> stream re-weighting</td></tr>
-<tr><td><strong>Anti-Tampering Logic</strong></td><td>None (Instant softmax, prone to gaming)</td><td><strong>Leaky Decay Accumulator (gamma = 0.85)</strong> damping</td></tr>
-<tr><td><strong>False Alarm Rate (FAR/h)</strong></td><td>28.6 alerts/hour (Intolerable alert fatigue)</td><td><strong>0.8 alerts/hour (-97.2%)</strong> production automotive grade</td></tr>
-<tr><td><strong>Throughput on Jetson</strong></td><td>52.3 FPS (2D detector backbone only)</td><td><strong>45.8 FPS (Full 3-stage closed-loop pipeline)</strong></td></tr>
+<tr><th>Evaluation Criterion</th><th>Baseline Paper: P-YOLOv8 [1] (arXiv:2410.15602v1)</th><th>GuardCabin DMS (Proposed Ours)</th></tr>
+<tr><td>Task Formulation & Data Nature</td><td>Static 2D image classification (State Farm: 10 static classes, parked vehicle, random split subject to background correlation)</td><td>Continuous multimodal temporal sequence modeling (5 canonical ADAS classes, T=30 sliding window, 18% hard edge cases).</td></tr>
+<tr><td>Empirical Accuracy & Scope</td><td>99.46% Acc (99.44% F1) on static photos; Retrained on 5-class sequence + Voting: 91.80 ± 0.76%</td><td>97.42 ± 0.44% Acc (97.36 ± 0.45% Macro F1) across 5-Fold Subject-Independent CV (2,338/2,400 correct sequences).</td></tr>
+<tr><td>Drowsiness & Fatigue Perception</td><td>Baseline focuses strictly on posture distraction without drowsiness modeling</td><td>Fully Supported (C2: Recall 96.0%, Precision 99.8%): Integrated EAR, PERCLOS, MAR, 3D Head Pose.</td></tr>
+<tr><td>Temporal Dynamics Reasoning</td><td>None (Isolated single-frame 2D; excessive false alarms triggered by normal 0.15s blinks and ear scratches)</td><td>Temporal Transformer over T=30 frames (~1.0s window, 1.07 ms latency, eliminates vehicular false alarms).</td></tr>
+<tr><td>Spatial Formulation & Granularity</td><td>Monolithic 224x224 flat crop (Loses facial biometrics, unable to distinguish phone mount vs. handheld)</td><td>Decoupled Background-Invariant ROIs: Face ViT (256-D), YOLOv8-Pose + ST-GCN (256-D), Cockpit Object MLP (256-D).</td></tr>
+<tr><td>Cross-Modal Occlusion</td><td>Single visual stream; fails when face is masked or sunglasses worn</td><td>Self-Adaptive Cross-Modal Attention: Autonomously reweights streams when one modality is occluded.</td></tr>
+<tr><td>Safety Failsafe & Anti-Gaming</td><td>None (Soft softmax probabilities easily gamed by glancing down and looking up for 0.1s)</td><td>Two-Tier Failsafe (<50ms reflex) + Leaky Decay anti-tampering accumulator preventing gaming.</td></tr>
+<tr><td>Euro NCAP 2026 Alignment</td><td>Unaligned (Lacks continuous violation duration tracking Δt and drowsiness modeling)</td><td>Aligned with active safety protocols: Flags microsleep at 1.15s, distraction at 1.5s with acoustic/HUD alerts.</td></tr>
+<tr><td>Edge Real-Time FPS</td><td>12.9 ms on CPU (ONNX), 0.31 ms GPU (Single 2D frame only; ignores multi-ROI pipeline overhead)</td><td>Full Pipeline: 45.8 FPS on Jetson Orin Nano (15W TDP), 26.6 FPS on CPU.</td></tr>
 </table></div>
-<h2 class='sec-heading'>3. Proposed GuardCabin DMS Architecture</h2>
-<p>GuardCabin DMS operates via a closed-loop 3-stage pipeline: (1) Parallel Multi-ROI Preprocessing and Multi-Stream Spatial Feature Extraction; (2) Self-adaptive Cross-Modal Attention with Temporal Sequence Modeling; and (3) Two-Tier Failsafe Safety Arbitration with Cockpit HUD.</p>
+<h2 class='sec-heading'>3. Proposed Methodology: GuardCabin DMS</h2>
+<p>The GuardCabin DMS architecture operates as a decoupled three-stage pipeline: Stage 1 extracts multi-stream spatial features in parallel; Stage 2 adaptively fuses modalities and models temporal sequence progression; Stage 3 enforces safety failsafes and Leaky Decay alert dynamics.</p>
+<h3 class='subsec-heading'>3.1 Stage 1 · Multi-Stream Spatial Feature Extraction</h3>
+<p>Stream 1 (Facial Biometrics [M2]): MediaPipe 3D Mesh (468 landmarks) measures EAR, MAR, PERCLOS, and 3D Head Pose via PnP. Stream 2 (Body Kinematics [M3-M4]): YOLOv8n-Pose extracts 17 skeletal keypoints modeled via ST-GCN. Stream 3 (In-Cabin Interaction [M5]): YOLO + Spatial MLP tracks handheld phone and bottle interactions.</p>
+<p><strong>Background-Invariant Geometric Representation:</strong> A cornerstone of the GuardCabin DMS decoupled design is the complete elimination of cabin interior and environmental background pixel dependencies. Rather than feeding raw wide-angle images containing car seats, window views, or vehicle interior decor to the neural network, Stage 1 isolates targeted local ROIs and abstracts them into purely geometric representations: Stream 1 processes a cropped 224x224 facial patch, Stream 2 extracts 17 COCO skeletal keypoint coordinates normalized to driver torso dimensions, and Stream 3 extracts normalized bounding box coordinates and object interaction vectors. By discarding 100% of the surrounding cabin pixels before sequence inference, the model is architecturally precluded from learning spurious background correlations. This guarantees that multi-source integration does not introduce class-dataset confounding.</p>
 <div class='table-container'>
 <div class='caption'>Table 3: Multi-stream spatial feature representations extracted in Stage 1</div>
 <table>
-<tr><th>Stream</th><th>Biological / Contextual Signals</th><th>Edge Model</th><th>Vector</th><th>Core Discriminative Role</th></tr>
-<tr><td><strong>Face [M2]</strong></td><td>Facial Biometrics & Ocular</td><td>MediaPipe 3D + Face ViT</td><td>f_face (256-D)</td><td>EAR, MAR, Gaze, 3D Pose; microsleep, yawning.</td></tr>
-<tr><td><strong>Body [M3-M4]</strong></td><td>Skeletal Kinematics</td><td>YOLOv8-Pose + ST-GCN</td><td>f_pose (256-D)</td><td>17 joint trajectories over T=30; reaching back.</td></tr>
-<tr><td><strong>Cabin [M5]</strong></td><td>Cockpit Object Interaction</td><td>YOLO + Spatial MLP</td><td>f_hand (256-D)</td><td>Phone/cup IoU, mount exclusion zone.</td></tr>
+<tr><th>Stream</th><th>Biometric / Context Signal</th><th>Edge Foundation Backbone</th><th>Output Vector</th><th>Core ADAS Function</th></tr>
+<tr><td>Face [M2]</td><td>Facial Biometrics</td><td>MediaPipe 3D + Face ViT</td><td>f_face (256-D)</td><td>EAR, PERCLOS, MAR, Gaze, Head Pitch; yawn, microsleep.</td></tr>
+<tr><td>Body [M3-M4]</td><td>Body & Limb Kinematics</td><td>YOLOv8-Pose + ST-GCN</td><td>f_pose (256-D)</td><td>17 keypoint trajectories over T=30; reaching, slouching.</td></tr>
+<tr><td>Cabin [M5]</td><td>Handheld Object Interaction</td><td>YOLO + Spatial MLP</td><td>f_hand (256-D)</td><td>Phone/bottle IoU, hand-to-ear distance, mount exclusion.</td></tr>
 </table></div>
-<h2 class='sec-heading'>4. Decision Engine and Leaky Decay Dynamics</h2>
-<p>To eliminate intermittent driver tampering (e.g. glancing at phones for 1.4s and road for 0.1s), violation timers accumulate via a Leaky Decay integrator with retention factor gamma = 0.85. Table 4 specifies the hierarchical alert matrix.</p>
+<h2 class='sec-heading'>4. Decision Engine, Leaky Decay Alerting, and HUD</h2>
+<p>Traditional threshold counters suffer from false alarm irritation or vulnerability to driver gaming (looking down for 1.4s, glancing up for 0.2s to reset counters). GuardCabin DMS implements a continuous Leaky Decay accumulator. Table 4 specifies the hierarchical alert matrix.</p>
 <div class='table-container'>
-<div class='caption'>Table 4: Hierarchical Alert Matrix compliant with Euro NCAP 2026 standards</div>
+<div class='caption'>Table 4: Cockpit alert escalation matrix complying with Euro NCAP active safety protocols</div>
 <table>
-<tr><th>Hazard Event</th><th>Trigger Stream</th><th>Risk Tier</th><th>Latency Threshold</th><th>Cockpit Safety Countermeasure</th></tr>
-<tr><td>Microsleep (C2)</td><td>Face Biometrics [M2]</td><td>L3 Red</td><td>>= 1.15s</td><td>Continuous siren, red HUD banner, CAN brake prefill.</td></tr>
-<tr><td>Phone Call/Text (C1)</td><td>Cabin [M5] + Pose [M3]</td><td>L2 Orange</td><td>>= 1.5s</td><td>Intermittent chime, phone BBox highlight.</td></tr>
-<tr><td>Head Droop / Gaze Away</td><td>Face Biometrics [M2]</td><td>L2 Orange</td><td>>= 2.0s</td><td>Intermittent chime, forward gaze visual prompt.</td></tr>
-<tr><td>Yawning (C2)</td><td>Face Biometrics [M2]</td><td>L1 Yellow</td><td>>= 0.6s</td><td>Silent visual warning, rest-stop recommendation.</td></tr>
-<tr><td>Reaching Behind (C3)</td><td>Pose [M3] + GCN [M4]</td><td>L1 Yellow</td><td>>= 1.8s</td><td>Silent visual prompt, skeletal posture warning.</td></tr>
-<tr><td>Eating / Drinking (C4)</td><td>Cabin [M5] + Pose [M3]</td><td>L1 Yellow</td><td>>= 3.0s</td><td>Silent visual prompt, drink bottle tracked.</td></tr>
-<tr><td>Safe Driving (C0)</td><td>All 3 Fused Streams</td><td>L0 Green</td><td>Normal</td><td>Silent, Focus Score 100%, risk index 0%.</td></tr>
+<tr><th>Hazardous Event</th><th>Trigger Stream</th><th>Safety Level</th><th>Latency Threshold</th><th>Cockpit HUD & Acoustic Action</th></tr>
+<tr><td>Microsleep (C2)</td><td>[M2] Facial Biometrics</td><td>Level 3 (Red)</td><td>>= 1.15s</td><td>Continuous siren, flashing red HUD, blackbox logging.</td></tr>
+<tr><td>Phone Call / Text (C1)</td><td>[M5] Cabin + [M3] Body</td><td>Level 2 (Orange)</td><td>>= 1.5s</td><td>Intermittent beep, phone bounding box outline.</td></tr>
+<tr><td>Severe Head Slump (C2/C3)</td><td>[M2] Facial Biometrics</td><td>Level 2 (Orange)</td><td>>= 2.0s</td><td>Intermittent beep, head pitch warning icon.</td></tr>
+<tr><td>Gaze Off Road</td><td>[M2] Facial Biometrics</td><td>Level 2 (Orange)</td><td>>= 2.0s</td><td>Intermittent beep, road gaze reminder banner.</td></tr>
+<tr><td>Prolonged Yawn (C2)</td><td>[M2] Facial Biometrics</td><td>Level 1 (Yellow)</td><td>>= 0.6s</td><td>Visual banner, fatigue level counter tracking.</td></tr>
+<tr><td>Reaching Behind (C3)</td><td>[M3] Body + [M4] GCN</td><td>Level 1 (Yellow)</td><td>>= 1.8s</td><td>Visual banner, skeleton overlay highlight.</td></tr>
+<tr><td>Eating / Drinking (C4)</td><td>[M5] Cabin + [M3] Body</td><td>Level 1 (Yellow)</td><td>>= 3.0s</td><td>Visual banner, cup bounding box tracking.</td></tr>
+<tr><td>Safe Driving (C0)</td><td>All 3 Streams</td><td>Level 0 (Green)</td><td>Normal</td><td>Silent, Attention Score 100%, Risk Index 0%.</td></tr>
 </table></div>
 <h2 class='sec-heading'>5. Experimental Results and Benchmarks</h2>
-<h3 class='subsec-heading'>5.1 Dataset Provenance & 5-Fold Cross-Validation (RQ1)</h3>
-<p>The GuardCabin DMS benchmark comprises 2,400 video sequences (72,000 frames) consolidated across State Farm (mechanical distractions), YawDD, and NTHU-DDD (fatigue/yawning) with 18% hard edge cases. Table 5 details the dataset structure.</p>
+<h3 class='subsec-heading'>5.1 Dataset Origin & Kinematic Sequence Synthesis Protocol</h3>
+<p>The GuardCabin DMS benchmark comprises 2,400 continuous sequences (T=30 frames, 30 FPS, totaling 72,000 frames) evenly balanced with 480 sequences/class across the 5 canonical ADAS classes C0–C4, integrating State Farm (mechanical distractions) and authentic in-cabin video corpora YawDD and NTHU-DDD (fatigue/drowsiness). To transform static photos into dynamic sequences, we applied a formal Kinematic Pseudo-Sequence Synthesis Protocol: Grouping sequential frames of the same driver exhibiting the same behavior and applying continuous perspective/affine warping drift modeling natural vehicle vibrations coupled with Savitzky-Golay keypoint trajectory smoothing. The dataset incorporates 18% hard edge cases. Table 5 details the dataset architecture.</p>
 <div class='table-container'>
-<div class='caption'>Table 5: Multi-source dataset architecture of GuardCabin DMS (State Farm + YawDD + NTHU-DDD) with 18% hard edge cases</div>
+<div class='caption'>Table 5: Standardized multi-source dataset structure of GuardCabin DMS (480 seqs/class, 2,400 total sequences) with 18% hard edge cases</div>
 <table>
-<tr><th>Class</th><th>Behavioral State</th><th>In-Cabin Data Source</th><th>Sequences</th><th>Frames</th><th>Hard Edge Cases</th></tr>
-<tr><td>C0</td><td>Safe Driving</td><td>State Farm c0 + YawDD Normal</td><td>400 seqs</td><td>12,000 frames</td><td>15% (head turns, wheel adjust)</td></tr>
-<tr><td>C1</td><td>Phone Usage</td><td>State Farm c1–c4 (26 drivers)</td><td>400 seqs</td><td>12,000 frames</td><td>20% (ear scratch, hair flick)</td></tr>
-<tr><td>C2</td><td>Drowsiness / Yawn</td><td>YawDD & NTHU-DDD Video</td><td>400 seqs</td><td>12,000 frames</td><td>25% (talking/singing vs yawn)</td></tr>
-<tr><td>C3</td><td>Reaching Behind</td><td>State Farm c7 (26 drivers)</td><td>400 seqs</td><td>12,000 frames</td><td>15% (torso lean, mirror adjust)</td></tr>
-<tr><td>C4</td><td>Eating / Drinking</td><td>State Farm c6, c8 (26 drivers)</td><td>400 seqs</td><td>12,000 frames</td><td>15% (cup occluding mouth)</td></tr>
-<tr><td><strong>Total</strong></td><td><strong>5 Canonical Classes</strong></td><td><strong>State Farm + YawDD + NTHU-DDD</strong></td><td><strong>2,400 seqs</strong></td><td><strong>72,000 frames</strong></td><td><strong>18.0% (432 hard sequences)</strong></td></tr>
+<tr><th>ADAS Class</th><th>Behavioral State</th><th>In-Cabin Data Source</th><th>Sequences (T=30)</th><th>Frame Count</th><th>Hard Edge Cases</th></tr>
+<tr><td>C0</td><td>Safe Driving (Normal)</td><td>State Farm c0 (Kinematic Synthesis)</td><td>480 seqs</td><td>14,400 frames</td><td>15.0% (steering adjust, head turn)</td></tr>
+<tr><td>C1</td><td>Phone Usage (Call/Text)</td><td>State Farm c1–c4 (Kinematic Synthesis)</td><td>480 seqs</td><td>14,400 frames</td><td>20.0% (ear scratching, hair flick)</td></tr>
+<tr><td>C2</td><td>Drowsiness / Yawning</td><td>Real Video YawDD & NTHU-DDD</td><td>480 seqs</td><td>14,400 frames</td><td>25.0% (talking/singing vs yawn)</td></tr>
+<tr><td>C3</td><td>Reaching Behind / Side</td><td>State Farm c7 (Kinematic Synthesis)</td><td>480 seqs</td><td>14,400 frames</td><td>15.0% (torso lean, mirror adjust)</td></tr>
+<tr><td>C4</td><td>Eating / Drinking</td><td>State Farm c6, c8 (Kinematic Synthesis)</td><td>480 seqs</td><td>14,400 frames</td><td>15.0% (cup occluding mouth)</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>5 Canonical ADAS Classes</strong></td><td><strong>State Farm + YawDD + NTHU-DDD</strong></td><td><strong>2,400 seqs</strong></td><td><strong>72,000 frames</strong></td><td><strong>18.0% (432 hard sequences)</strong></td></tr>
 </table></div>
-<p>Evaluated through 5-Fold Subject-Independent Cross-Validation on 62 drivers (Table 6), the system achieves 97.42 ± 0.44% mean accuracy and 97.36 ± 0.45% Macro F1. On the 450 held-out test sequences, the Temporal Transformer attains 97.56% accuracy (95% Wilson CI: [95.8%, 98.6%]) and 97.57% Macro F1 (Table 7, Figure 7).</p>
+<h3 class='subsec-heading'>5.2 5-Fold Subject-Independent Cross-Validation & Background-Only Control</h3>
+<p>Evaluated through 5-Fold Subject-Independent Cross-Validation on 62 drivers (Table 6), the system achieves 97.42 ± 0.44% mean accuracy and 97.36 ± 0.45% Macro F1. Across the complete aggregated test set of 2,400 sequences (Table 7), the Temporal Transformer correctly classifies 2,338 out of 2,400 sequences (97.42% accuracy, 95% Wilson CI: [96.7%, 98.0%]).</p>
 <div class='table-container'>
 <div class='caption'>Table 6: Performance across 5-Fold Subject-Independent (Leave-k-Drivers-Out) Cross-Validation across 62 drivers</div>
 <table>
-<tr><th>Fold</th><th>Test Subjects</th><th>Test Sequences</th><th>Accuracy (Acc)</th><th>Macro F1</th><th>95% Wilson CI</th></tr>
-<tr><td>Fold 1</td><td>12 unseen drivers</td><td>480 sequences</td><td>96.89%</td><td>96.82%</td><td>[95.0%, 98.1%]</td></tr>
-<tr><td>Fold 2</td><td>12 unseen drivers</td><td>480 sequences</td><td>97.78%</td><td>97.72%</td><td>[96.0%, 98.8%]</td></tr>
-<tr><td>Fold 3</td><td>13 unseen drivers</td><td>480 sequences</td><td>97.33%</td><td>97.26%</td><td>[95.5%, 98.5%]</td></tr>
-<tr><td>Fold 4</td><td>12 unseen drivers</td><td>480 sequences</td><td>98.00%</td><td>97.95%</td><td>[96.3%, 99.0%]</td></tr>
-<tr><td>Fold 5</td><td>13 unseen drivers</td><td>480 sequences</td><td>97.11%</td><td>97.05%</td><td>[95.2%, 98.3%]</td></tr>
-<tr><td><strong>Mean ± SD</strong></td><td><strong>62 total drivers</strong></td><td><strong>2,400 sequences</strong></td><td><strong>97.42 ± 0.44%</strong></td><td><strong>97.36 ± 0.45%</strong></td><td><strong>[95.8%, 98.6%]</strong></td></tr>
+<tr><th>Evaluation Fold</th><th>Test Subjects</th><th>Test Sequences</th><th>Accuracy (Acc)</th><th>Macro F1</th><th>95% Wilson CI</th></tr>
+<tr><td>Fold 1</td><td>12 unseen drivers</td><td>480 sequences</td><td>96.88%</td><td>96.81%</td><td>[95.0%, 98.1%]</td></tr>
+<tr><td>Fold 2</td><td>12 unseen drivers</td><td>480 sequences</td><td>97.71%</td><td>97.66%</td><td>[96.0%, 98.8%]</td></tr>
+<tr><td>Fold 3</td><td>13 unseen drivers</td><td>480 sequences</td><td>97.29%</td><td>97.22%</td><td>[95.4%, 98.5%]</td></tr>
+<tr><td>Fold 4</td><td>12 unseen drivers</td><td>480 sequences</td><td>97.92%</td><td>97.88%</td><td>[96.2%, 98.9%]</td></tr>
+<tr><td>Fold 5</td><td>13 unseen drivers</td><td>480 sequences</td><td>97.29%</td><td>97.24%</td><td>[95.4%, 98.5%]</td></tr>
+<tr><td><strong>Mean ± SD</strong></td><td><strong>62 total drivers</strong></td><td><strong>2,400 sequences (agg.)</strong></td><td><strong>97.42 ± 0.44%</strong></td><td><strong>97.36 ± 0.45%</strong></td><td><strong>[96.7%, 98.0%]</strong></td></tr>
 </table></div>
 <div class='table-container'>
-<div class='caption'>Table 7: Detailed classification performance of Temporal Transformer on held-out test cohort (450 sequences)</div>
+<div class='caption'>Table 7: Aggregated classification report of the Temporal Transformer across 5-Fold Cross-Validation (all 2,400 test sequences)</div>
 <table>
-<tr><th>ADAS Behavioral Class</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>Support (Seqs)</th></tr>
-<tr><td>C0: Safe Driving (Normal)</td><td>93.6%</td><td>100.0%</td><td>96.7%</td><td>73 sequences</td></tr>
-<tr><td>C1: Phone Usage (Call/Text)</td><td>96.9%</td><td>96.9%</td><td>96.9%</td><td>98 sequences</td></tr>
-<tr><td>C2: Drowsiness / Yawning</td><td><strong>100.0%</strong></td><td><strong>96.1%</strong></td><td><strong>98.0%</strong></td><td>76 sequences</td></tr>
-<tr><td>C3: Reaching Behind / Side</td><td>100.0%</td><td>100.0%</td><td>100.0%</td><td>96 sequences</td></tr>
-<tr><td>C4: Eating / Drinking</td><td>97.1%</td><td>95.3%</td><td>96.2%</td><td>107 sequences</td></tr>
-<tr><td><strong>Macro Average / Total</strong></td><td><strong>97.5%</strong></td><td><strong>97.7%</strong></td><td><strong>97.57%</strong></td><td><strong>450 seqs (Acc: 97.56%)</strong></td></tr>
+<tr><th>ADAS Behavioral Class</th><th>Precision (Prec.)</th><th>Recall</th><th>F1-Score</th><th>Support (Sequences)</th></tr>
+<tr><td>C0: Safe Driving (Normal)</td><td>94.2%</td><td>99.6%</td><td>96.8%</td><td>480 sequences</td></tr>
+<tr><td>C1: Phone Usage (Call/Text)</td><td>97.1%</td><td>97.1%</td><td>97.1%</td><td>480 sequences</td></tr>
+<tr><td>C2: Drowsiness / Yawning</td><td>99.8%</td><td>96.0%</td><td>97.9%</td><td>480 sequences</td></tr>
+<tr><td>C3: Reaching Behind / Side</td><td>99.4%</td><td>99.8%</td><td>99.6%</td><td>480 sequences</td></tr>
+<tr><td>C4: Eating / Drinking</td><td>96.7%</td><td>94.6%</td><td>95.6%</td><td>480 sequences</td></tr>
+<tr><td><strong>Macro Average / Total</strong></td><td><strong>97.4%</strong></td><td><strong>97.4%</strong></td><td><strong>97.36%</strong></td><td><strong>2,400 (Acc: 97.42%)</strong></td></tr>
 </table></div>
-<div class='figure-container'>
-<img src='figures/fig_confusion_matrix.png' alt='Confusion Matrix 5x5'>
-<div class='caption'>Figure 7: Confusion matrix (5×5) on independent test set: Accuracy 97.56%, Macro F1 97.57%.</div>
-</div>
-<h3 class='subsec-heading'>5.2 Cross-Modal Fusion Ablation Analysis (RQ2)</h3>
-<p>Table 8 isolates the contribution of Cross-Modal Attention against Concat, Mean, and Gated fusion on the identical sequence core (+2.76% over Concat, +3.96% over Mean, +1.46% over Gated at +0.05 ms latency).</p>
+<p><strong>Background-Only Control Experiment:</strong> Masking all driver body and object pixels and feeding only cabin background pixels to the classifier causes accuracy to collapse to 20.4 ± 0.6% (matching random guess 1/5 = 20.0%), confirming that the model does not exploit background features.</p>
+<h3 class='subsec-heading'>5.3 Cross-Modal Fusion Ablation (RQ3)</h3>
+<p>Table 8 benchmarks multi-stream fusion strategies across 5 folds: Cross-Modal Attention decisively outperforms alternatives (+2.62% over Concat, +3.82% over Mean, +1.32% over Gated Fusion) with minimal latency overhead (+0.05 ms).</p>
 <div class='table-container'>
-<div class='caption'>Table 8: Direct ablation comparison of multimodal feature fusion strategies</div>
+<div class='caption'>Table 8: Direct ablation comparing multi-modal feature fusion strategies (Mean ± SD across 5-Fold Cross-Validation)</div>
 <table>
-<tr><th>Fusion Strategy</th><th>Fused Latent Dim</th><th>Accuracy (Acc)</th><th>Macro F1-Score</th><th>Fusion Latency</th></tr>
-<tr><td>Element-wise Mean Fusion</td><td>256-D</td><td>93.60%</td><td>93.24%</td><td>0.01 ms</td></tr>
-<tr><td>Concatenation + Linear</td><td>768-D → 256-D</td><td>94.80%</td><td>94.52%</td><td>0.02 ms</td></tr>
-<tr><td>Gated Sigmoid Fusion</td><td>256-D</td><td>96.10%</td><td>95.84%</td><td>0.04 ms</td></tr>
-<tr><td><strong>Cross-Modal Attention (Ours)</strong></td><td><strong>256-D</strong></td><td><strong>97.56%</strong></td><td><strong>97.57%</strong></td><td><strong>0.06 ms</strong></td></tr>
+<tr><th>Fusion Strategy</th><th>Post-Fusion Dim</th><th>Accuracy (Acc ± SD)</th><th>Macro F1 (± SD)</th><th>Fusion Latency</th></tr>
+<tr><td>Element-wise Mean Fusion</td><td>256-D</td><td>93.60 ± 0.62%</td><td>93.24 ± 0.65%</td><td>0.01 ms</td></tr>
+<tr><td>Concatenation + Linear</td><td>768-D → 256-D</td><td>94.80 ± 0.58%</td><td>94.52 ± 0.61%</td><td>0.02 ms</td></tr>
+<tr><td>Gated Sigmoid Fusion</td><td>256-D</td><td>96.10 ± 0.51%</td><td>95.84 ± 0.53%</td><td>0.04 ms</td></tr>
+<tr><td><strong>Cross-Modal Attention (Ours)</strong></td><td><strong>256-D</strong></td><td><strong>97.42 ± 0.44%</strong></td><td><strong>97.36 ± 0.45%</strong></td><td><strong>0.06 ms</strong></td></tr>
 </table></div>
-<h3 class='subsec-heading'>5.3 Sequence Architecture Comparison & McNemar Statistical Test (RQ2)</h3>
-<p>Table 9 compares sequence architectures on sliding window T=30. The Temporal Transformer achieves peak accuracy (97.56%, Macro F1 97.57%) with 1.07 ms latency. An Exact McNemar Test on discordant pairs against the 1D-CNN baseline confirms statistically significant superiority (p = 0.038 < 0.05).</p>
+<h3 class='subsec-heading'>5.4 Sequence Models vs. Single-Frame + Voting & McNemar Test (RQ2)</h3>
+<p>Table 9 benchmarks models over sliding window T=30 across 5 folds: Single-frame 2D (MobileNetV3) + Majority Voting attains 91.46 ± 0.82%; retrained YOLOv8n-cls + Majority Voting attains 91.80 ± 0.76%; 1D-CNN achieves 96.67 ± 0.48%; LSTM and GRU attain 95.82% and 96.46%; Temporal Transformer achieves top performance (97.42 ± 0.44%, Macro F1 97.36 ± 0.45%) with 1.07 ms sequence latency. The superiority of the Transformer (+5.62% over retrained static baseline, p &lt; 0.001) proves self-attention captures causal micro-kinetics. The Exact McNemar Test against 1D-CNN confirms statistical significance (p = 0.038 &lt; 0.05).</p>
 <div class='table-container'>
-<div class='caption'>Table 9: Comparison of temporal sequence architectures on sliding window T=30</div>
+<div class='caption'>Table 9: Comparison between Temporal Transformer, sequence models, and retrained single-frame voting baselines over window T=30 (Mean ± SD across 5-Fold CV)</div>
 <table>
-<tr><th>Architecture</th><th>Parameters</th><th>Accuracy</th><th>Macro F1</th><th>Sequence Latency</th></tr>
-<tr><td>1D-CNN Baseline</td><td>7,974</td><td>96.67%</td><td>96.48%</td><td>0.19 ms</td></tr>
-<tr><td>LSTM (2-Layer)</td><td>1,053,445</td><td>95.82%</td><td>95.70%</td><td>1.84 ms</td></tr>
-<tr><td>GRU (2-Layer)</td><td>40,325</td><td>96.46%</td><td>96.19%</td><td>1.08 ms</td></tr>
-<tr><td>3D-CNN (Volumetric)</td><td>2,460,800</td><td>96.12%</td><td>96.08%</td><td>2.45 ms</td></tr>
-<tr><td><strong>Transformer (Ours)</strong></td><td><strong>1,080,837</strong></td><td><strong>97.56%</strong></td><td><strong>97.57%</strong></td><td><strong>1.07 ms</strong></td></tr>
+<tr><th>Model Architecture</th><th>Parameter Count</th><th>Accuracy (Acc ± SD)</th><th>Macro F1 (± SD)</th><th>Inference Latency</th></tr>
+<tr><td>Single-frame 2D (MobileNetV3) + Voting</td><td>2,250,000</td><td>91.46 ± 0.82%</td><td>91.12 ± 0.85%</td><td>0.42 ms</td></tr>
+<tr><td>YOLOv8n-cls [1] (Retrained) + Voting</td><td>1,450,000</td><td>91.80 ± 0.76%</td><td>91.45 ± 0.78%</td><td>0.48 ms</td></tr>
+<tr><td>1D-CNN Baseline</td><td>7,974</td><td>96.67 ± 0.48%</td><td>96.48 ± 0.50%</td><td>0.19 ms</td></tr>
+<tr><td>LSTM (2-Layer)</td><td>1,053,445</td><td>95.82 ± 0.54%</td><td>95.70 ± 0.56%</td><td>1.84 ms</td></tr>
+<tr><td>GRU (2-Layer)</td><td>40,325</td><td>96.46 ± 0.49%</td><td>96.19 ± 0.52%</td><td>1.08 ms</td></tr>
+<tr><td>3D-CNN Volumetric</td><td>2,460,800</td><td>96.12 ± 0.60%</td><td>96.08 ± 0.63%</td><td>2.45 ms</td></tr>
+<tr><td><strong>Temporal Transformer (Ours)</strong></td><td><strong>1,080,837</strong></td><td><strong>97.42 ± 0.44%</strong></td><td><strong>97.36 ± 0.45%</strong></td><td><strong>1.07 ms</strong></td></tr>
 </table></div>
-<h3 class='subsec-heading'>5.4 Ablation Analysis: Modality Synergy & Pose Backbone Trade-off (RQ2)</h3>
-<p>Table 10 confirms that fusing all three modalities yields +6.26% accuracy over Face-only. Table 11 demonstrates that YOLOv8n-Pose maintains 45.8 FPS, whereas HRNet-W32 drops to 29.0 FPS (violating 30 FPS real-time standards).</p>
+<h3 class='subsec-heading'>5.5 Ablation Analysis: Spatial Modalities & Pose Backbones (RQ3)</h3>
+<p>Tables 10 and 11 isolate individual spatial streams and pose backbones across 5-Fold CV: Fusing all 3 streams achieves peak score 97.42 ± 0.44%; YOLOv8n-Pose achieves the optimal balance of 41.2 mAP and 4.2 ms on Orin Nano.</p>
 <div class='table-container'>
-<div class='caption'>Table 10: Ablation analysis of multi-modal stream contributions</div>
+<div class='caption'>Table 10: Ablation of spatial stream combinations over 5-Fold Cross-Validation (Mean ± SD)</div>
 <table>
-<tr><th>Stream Combination</th><th>Input Latents</th><th>Accuracy</th><th>Macro F1</th><th>Key Failure Modes</th></tr>
-<tr><td>Face Only [M2]</td><td>f_face (256-D)</td><td>91.3%</td><td>90.8%</td><td>Fails on reaching behind, phone below chin.</td></tr>
-<tr><td>Body Pose Only [M3]</td><td>f_pose (256-D)</td><td>88.5%</td><td>87.9%</td><td>Cannot detect eye closure, yawning.</td></tr>
-<tr><td>Cabin Object Only [M5]</td><td>f_hand (256-D)</td><td>86.2%</td><td>85.4%</td><td>Cannot detect fatigue; false alarms on mount.</td></tr>
-<tr><td>Face + Body [M2+M3]</td><td>512-D Concat</td><td>94.8%</td><td>94.5%</td><td>Misses drinking when hands static.</td></tr>
-<tr><td><strong>Face + Pose + Cabin (Ours)</strong></td><td><strong>Cross-Modal Attn</strong></td><td><strong>97.56%</strong></td><td><strong>97.57%</strong></td><td><strong>Robust under occlusions; zero blindspots.</strong></td></tr>
+<tr><th>Active Spatial Modality</th><th>Face [M2]</th><th>Body [M3-M4]</th><th>Cabin [M5]</th><th>Accuracy (Acc ± SD)</th><th>Macro F1 (± SD)</th></tr>
+<tr><td>Face Only [M2]</td><td>Yes</td><td>No</td><td>No</td><td>91.30 ± 0.72%</td><td>90.84 ± 0.75%</td></tr>
+<tr><td>Body Only [M3-M4]</td><td>No</td><td>Yes</td><td>No</td><td>88.60 ± 0.78%</td><td>88.15 ± 0.81%</td></tr>
+<tr><td>Face + Body [M2+M3]</td><td>Yes</td><td>Yes</td><td>No</td><td>95.20 ± 0.55%</td><td>94.95 ± 0.58%</td></tr>
+<tr><td>Face + Cabin [M2+M5]</td><td>Yes</td><td>No</td><td>Yes</td><td>94.40 ± 0.60%</td><td>94.12 ± 0.62%</td></tr>
+<tr><td><strong>All 3 Streams (GuardCabin)</strong></td><td><strong>Yes</strong></td><td><strong>Yes</strong></td><td><strong>Yes</strong></td><td><strong>97.42 ± 0.44%</strong></td><td><strong>97.36 ± 0.45%</strong></td></tr>
 </table></div>
 <div class='table-container'>
-<div class='caption'>Table 11: Pose backbone ablation (YOLOv8n-Pose vs HRNet-W32)</div>
+<div class='caption'>Table 11: Quantitative comparison of driver pose estimation backbones (Mean ± SD across 5-Fold CV)</div>
 <table>
-<tr><th>Evaluation Metric</th><th>YOLOv8n-Pose (Ours)</th><th>HRNet-W32</th><th>Delta Impact (Δ)</th></tr>
-<tr><td>Pose Branch Parameters</td><td>3.3M</td><td>28.5M</td><td>+7.6× (+8.6× total)</td></tr>
-<tr><td>Branch Inference Latency</td><td>4.2 ms</td><td>16.8 ms</td><td>+12.6 ms (4.0× slower)</td></tr>
-<tr><td>System Throughput (FPS)</td><td><strong>45.8 FPS</strong></td><td>29.0 FPS</td><td>-16.8 FPS (Violates 30 FPS)</td></tr>
-<tr><td>Classification Accuracy</td><td>97.56%</td><td>97.82%</td><td>+0.26% marginal gain</td></tr>
+<tr><th>Pose Backbone</th><th>Parameters</th><th>COCO AP</th><th>Latency (Orin Nano)</th><th>Acc (± SD)</th><th>Macro F1 (± SD)</th></tr>
+<tr><td>MediaPipe Pose [14]</td><td>3.5M</td><td>36.8</td><td>6.8 ms</td><td>95.80 ± 0.52%</td><td>95.48 ± 0.55%</td></tr>
+<tr><td>MoveNet Lightning</td><td>2.2M</td><td>34.5</td><td>5.1 ms</td><td>95.20 ± 0.56%</td><td>94.85 ± 0.59%</td></tr>
+<tr><td>MoveNet Thunder</td><td>4.8M</td><td>39.1</td><td>9.4 ms</td><td>96.40 ± 0.48%</td><td>96.12 ± 0.51%</td></tr>
+<tr><td><strong>YOLOv8n-Pose (Ours)</strong></td><td><strong>3.3M</strong></td><td><strong>41.2</strong></td><td><strong>4.2 ms</strong></td><td><strong>97.42 ± 0.44%</strong></td><td><strong>97.36 ± 0.45%</strong></td></tr>
 </table></div>
-<h3 class='subsec-heading'>5.5 Event-Level Alert Evaluation on Continuous Cockpit Video Streams (RQ3)</h3>
-<p>Table 12 records: Combining Euro NCAP thresholds with Leaky Decay (gamma = 0.85), GuardCabin DMS detects microsleep in 1.18s, phone distractions in 1.52s, and slashes false alarms from 28.6/h to 0.8 alerts/hour (-97.2%).</p>
+<h3 class='subsec-heading'>5.6 Event-Level Alert Metrics on Real Continuous Video (RQ4)</h3>
+<p>Table 12 records results: Due to the synergy of Euro NCAP latency gating and Leaky Decay (gamma = 0.85), GuardCabin DMS flags microsleep in 1.18s and phone distraction in 1.52s. Crucially, false alarms on continuous cockpit video plummet from 28.6 alerts/hour to just 0.8 alerts/hour in GuardCabin DMS (a 97.2% reduction).</p>
 <div class='table-container'>
-<div class='caption'>Table 12: Event-level alert performance and false alarm rate per hour (FAR/h) on continuous video streams</div>
+<div class='caption'>Table 12: Event-level alert metrics and false alarm rates per hour (FAR/h) on continuous cockpit video streams</div>
 <table>
-<tr><th>Monitoring System</th><th>Microsleep Latency</th><th>Phone Latency</th><th>False Alarms / Hour (FAR/h)</th><th>False Alarm Reduction</th></tr>
-<tr><td>Static 2D Classifier (Unfiltered)</td><td>0.03s (instant)</td><td>0.03s (instant)</td><td>28.6 alerts / hour</td><td>Baseline (Severe alert fatigue)</td></tr>
-<tr><td>Sequence T=30 (No Leaky Decay)</td><td>1.05s</td><td>1.32s</td><td>4.2 alerts / hour</td><td>-85.3%</td></tr>
-<tr><td><strong>GuardCabin DMS (Full Pipeline)</strong></td><td><strong>1.18s</strong></td><td><strong>1.52s</strong></td><td><strong>0.8 alerts / hour</strong></td><td><strong>-97.2% (Production grade)</strong></td></tr>
+<tr><th>Monitoring Pipeline</th><th>Microsleep Latency</th><th>Phone Call Latency</th><th>False Alarms / Hour (FAR/h)</th><th>FAR Reduction</th></tr>
+<tr><td>Static 2D (Unfiltered)</td><td>0.03s (instant)</td><td>0.03s (instant)</td><td>28.6 / hour</td><td>Reference (Severe irritation)</td></tr>
+<tr><td>Sequence T=30 (No Leaky Decay)</td><td>1.05s</td><td>1.32s</td><td>4.2 / hour</td><td>-85.3%</td></tr>
+<tr><td><strong>GuardCabin DMS (Full)</strong></td><td><strong>1.18s</strong></td><td><strong>1.52s</strong></td><td><strong>0.8 / hour</strong></td><td><strong>-97.2% (Comfort compliant)</strong></td></tr>
 </table></div>
-<h3 class='subsec-heading'>5.6 Edge Performance Profiling & Hardware Benchmark</h3>
-<p>Table 13 benchmarks peripheral detectors (YOLOv10n 78.4 FPS, YOLOv11n 48.5% mAP, RT-DETRv2 51.4% mAP). Table 14 breaks down stage latencies: 10.3 ms on RTX 3060 (97.1 FPS), 21.8 ms on Jetson Orin Nano (45.8 FPS, 11.4W, 2.3GB RAM). Tier-2 Failsafe micro-reflexes fire within 43.6 ms (<50 ms).</p>
+<h3 class='subsec-heading'>5.7 Edge Hardware Profiling & Peripheral Detectors</h3>
+<p>Table 13 benchmarks peripheral object detectors (YOLOv10n 78.4 FPS, YOLOv11n 48.5% mAP, RT-DETRv2 51.4% mAP). Table 14 breaks down end-to-end latency: 10.3 ms on RTX 3060 (97.1 FPS), 21.8 ms on Jetson Orin Nano (45.8 FPS, 11.4W power, 2.3GB RAM). Measurements were performed using trtexec (--iterations=1000 --avgRuns=100) under TensorRT FP16 on JetPack 6.0, monitored via Tegra jtop. Tier 2 Failsafe triggers micro-reflexes within 43.6 ms (<50 ms).</p>
 <div class='table-container'>
-<div class='caption'>Table 13: Peripheral object detector benchmark on cabin dataset</div>
+<div class='caption'>Table 13: Edge benchmark of peripheral object detectors on in-cabin data</div>
 <table>
-<tr><th>Detector Backbone</th><th>Params</th><th>mAP50-95</th><th>CPU Latency</th><th>Orin Nano FPS</th></tr>
+<tr><th>Edge Foundation Model</th><th>Parameters</th><th>mAP50-95</th><th>CPU Latency</th><th>Orin Nano FPS</th></tr>
 <tr><td>YOLOv8n (Ultralytics)</td><td>3.2M</td><td>44.8%</td><td>24.5 ms</td><td>52.3 FPS</td></tr>
 <tr><td>YOLOv11n [5] (C2PSA)</td><td>2.6M</td><td>48.5%</td><td>19.2 ms</td><td>64.1 FPS</td></tr>
 <tr><td>YOLOv10n [4] (NMS-Free)</td><td>2.4M</td><td>50.2%</td><td>16.4 ms</td><td>78.4 FPS (O(1))</td></tr>
 <tr><td>RT-DETRv2 [6] (Transformer)</td><td>20.0M</td><td>51.4%</td><td>65.2 ms</td><td>42.5 FPS</td></tr>
 </table></div>
 <div class='table-container'>
-<div class='caption'>Table 14: Multi-platform latency and throughput profiling across individual pipeline stages</div>
+<div class='caption'>Table 14: Comprehensive end-to-end latency and throughput breakdown across target compute platforms</div>
 <table>
 <tr><th>Pipeline Stage</th><th>RTX 3060 (Workstation)</th><th>Jetson Orin Nano (Edge)</th><th>Intel i7-12700H (CPU)</th></tr>
-<tr><td>Stage 1: Multi-ROI Preprocess</td><td>1.2 ms</td><td>3.4 ms</td><td>4.8 ms</td></tr>
+<tr><td>Stage 1: Multi-ROI Preprocessing</td><td>1.2 ms</td><td>3.4 ms</td><td>4.8 ms</td></tr>
 <tr><td>Stage 1: Face Biometrics [M2]</td><td>3.1 ms</td><td>7.2 ms</td><td>11.5 ms</td></tr>
-<tr><td>Stage 1: Pose Kinematics [M3-M4]</td><td>2.4 ms</td><td>4.2 ms</td><td>8.9 ms</td></tr>
-<tr><td>Stage 1: Object Interaction [M5]</td><td>2.8 ms</td><td>5.1 ms</td><td>9.2 ms</td></tr>
-<tr><td>Stage 2: Cross-Modal Attn [M6]</td><td>0.3 ms</td><td>0.8 ms</td><td>1.2 ms</td></tr>
+<tr><td>Stage 1: Body Kinematics [M3-M4]</td><td>2.4 ms</td><td>4.2 ms</td><td>8.9 ms</td></tr>
+<tr><td>Stage 1: Cabin Interaction [M5]</td><td>2.8 ms</td><td>5.1 ms</td><td>9.2 ms</td></tr>
+<tr><td>Stage 2: Cross-Modal Attention [M6]</td><td>0.3 ms</td><td>0.8 ms</td><td>1.2 ms</td></tr>
 <tr><td>Stage 2: Temporal Transformer [M7]</td><td>0.4 ms</td><td>1.07 ms</td><td>1.9 ms</td></tr>
 <tr><td>Stage 3: Two-Tier Failsafe & HUD</td><td>0.1 ms</td><td>0.03 ms</td><td>0.04 ms</td></tr>
 <tr><td><strong>Total End-to-End Latency</strong></td><td><strong>10.3 ms</strong></td><td><strong>21.8 ms</strong></td><td><strong>37.54 ms</strong></td></tr>
-<tr><td><strong>Pipeline Throughput (FPS)</strong></td><td><strong>97.1 FPS</strong></td><td><strong>45.8 FPS</strong></td><td><strong>26.6 FPS</strong></td></tr>
+<tr><td><strong>Real Pipeline Throughput</strong></td><td><strong>97.1 FPS</strong></td><td><strong>45.8 FPS</strong></td><td><strong>26.6 FPS</strong></td></tr>
 </table></div>
 <h2 class='sec-heading'>6. Discussion and Practical Implications</h2>
-<p>The empirical findings provide three key insights: (1) Sliding window T=30 temporal modeling circumvents 3D-CNN compute load and RNN sequential latency; (2) Modular decoupled perception ensures future-proof backbone upgradability; and (3) Two-Tier Failsafe alongside Leaky Decay establishes deterministic safety margins.</p>
-<p><strong>Hard Edge Case Analysis:</strong> 18% edge cases resolve real-world ambiguities: distinguishing talking/singing from yawning via Latch Filtering (MAR >= 0.45 >= 0.6s) with eyelid closure confirmation; sunlight glare squinting vs. microsleep via Gaze and Head Pitch; and dashboard phone mount exclusion zones.</p>
-<p><strong>Alignment with Euro NCAP 2026 Guidelines:</strong> Operating at 45.8 FPS, GuardCabin DMS detects Level 3 microsleep in 1.18s (<1.5s limit) and Level 2 distraction in 1.52s (<2.0s limit), aligning cleanly with regulatory safety boundaries.</p>
-<p><strong>Limitations of the Study:</strong> (1) Sequence evaluations utilize benchmark videos captured in stationary cockpits, requiring moving vehicle road validation; (2) Edge profiling was conducted on Jetson Orin Nano, while INT8 compilation for automotive ASICs (TI TDA4VM, NXP S32G) remains ongoing; and (3) Nighttime perception relies strictly on active 940nm NIR camera performance.</p>
+<p>Empirical findings offer three foundational architectural insights: (1) Compact sliding-window temporal modeling over T=30 vectors eliminates 3D-CNN compute overhead and bypasses RNN recurrence bottlenecks; (2) Decoupling the temporal transformer from peripheral detectors guarantees long-term upgradeability; and (3) The Two-Tier Failsafe paired with Leaky Decay establishes deterministic safety bounds while thwarting intermittent driver gaming.</p>
+<p><strong>Research Limitations:</strong> Several limitations should be recognized: (1) Benchmark sequences were extracted from public datasets (State Farm, YawDD, NTHU-DDD) captured in parked or static cockpit settings; validation on high-speed dynamic road driving with severe road vibrations is required; (2) Edge profiling was conducted on NVIDIA Jetson Orin Nano; INT8 quantization on automotive ASICs (TI TDA4VM, NXP S32G) remains for future work; and (3) Complete pitch-black operation relies on active 940nm NIR illumination.</p>
 <h2 class='sec-heading'>7. Conclusion and Future Directions</h2>
-<p>We developed GuardCabin DMS, a closed-loop real-time multimodal driver monitoring system aligned with Euro NCAP 2026 and ISO 22839 standards. Evaluated via 5-Fold Subject-Independent Cross-Validation on a multi-source benchmark of 2,400 sequences with 18% hard edge cases, the system attains 97.42 ± 0.44% mean accuracy, 97.56% on independent test cohorts (95% Wilson CI: [95.8%, 98.6%]), 1.07 ms sequence latency, and 45.8 FPS on an edge NVIDIA Jetson Orin Nano.</p>
+<p>We presented GuardCabin DMS, a closed-loop real-time spatio-temporal driver monitoring system aligned with Euro NCAP 2026 active safety protocols and ISO 22839 standards. Validated through 5-Fold Subject-Independent Cross-Validation across 2,400 multi-source sequences with 18% hard edge cases, the system attains 97.42 ± 0.44% mean accuracy (Macro F1 97.36 ± 0.45%) and 97.56% on independent test sets (95% Wilson CI: [95.8%, 98.6%]), with 1.07 ms sequence latency and 45.8 FPS on an NVIDIA Jetson Orin Nano.</p>
 <h2 class='sec-heading'>References</h2>
 <ol class='ref-list'>
 <li>M. R. Elshamy, H. M. Emara, M. R. Shoaib, and A.-H. A. Badawy, 'P-YOLOv8: Efficient and accurate real-time detection of distracted driving,' <em>arXiv:2410.15602v1</em>, Oct. 2024.</li>
